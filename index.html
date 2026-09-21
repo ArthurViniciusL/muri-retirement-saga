@@ -21,8 +21,7 @@
       :root {
         --zinc-50: #fafafa;
         --zinc-100: #f4f4f5;
-        --zinc-400: #a1a1aa;
-        --zinc-700: #3f3f46;
+        --zinc-500: #71717a;
         --zinc-900: #18181b;
         --zinc-950: #09090b;
       }
@@ -38,8 +37,8 @@
         width: 100%;
         height: 100%;
         overflow: hidden;
-        background: var(--zinc-950);
-        color: var(--zinc-50);
+        background: var(--zinc-50);
+        color: var(--zinc-950);
         font-family: ui-monospace, "Courier New", monospace;
         /* Jogo touch: sem seleção, sem zoom por duplo toque, sem pull-to-refresh. */
         -webkit-user-select: none;
@@ -64,7 +63,9 @@
         display: block;
       }
 
-      /* Aviso de orientação — System Design §14: landscape obrigatório. */
+      /* Aviso de orientação — System Design §14: landscape obrigatório.
+         Mesma linguagem da tela inicial: papel claro, entalhe preto, sombra por
+         hachura. Cantos assimétricos imitam o corte da goiva (xilo-guidelines §4.4). */
       #orientation-gate {
         position: fixed;
         inset: 0;
@@ -73,10 +74,11 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 1.25rem;
+        gap: 1.5rem;
         padding: 2rem;
         text-align: center;
-        background: var(--zinc-950);
+        background: var(--zinc-50);
+        color: var(--zinc-950);
       }
 
       #orientation-gate[data-visible="true"] {
@@ -87,44 +89,50 @@
         visibility: hidden;
       }
 
-      .orientation-gate__icon {
-        width: 4.5rem;
-        height: 4.5rem;
-        border: 4px solid var(--zinc-50);
-        border-radius: 0.5rem;
-        animation: rotate-hint 2s ease-in-out infinite;
+      .orientation-gate__phone {
+        width: 7rem;
+        height: 7rem;
+      }
+
+      .orientation-gate__device {
+        transform-box: fill-box;
+        transform-origin: center;
+        animation: rotate-hint 2.4s ease-in-out infinite;
       }
 
       .orientation-gate__title {
         margin: 0;
-        font-size: 1.125rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
+        padding: 0.5rem 1.25rem 0.625rem;
+        font-size: 1.25rem;
+        font-weight: 700;
         color: var(--zinc-50);
+        background: var(--zinc-950);
+        border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
       }
 
       .orientation-gate__text {
         margin: 0;
-        max-width: 28ch;
-        font-size: 0.875rem;
+        max-width: 26ch;
+        font-size: 0.9375rem;
         line-height: 1.6;
-        color: var(--zinc-400);
+        color: var(--zinc-900);
       }
 
       @keyframes rotate-hint {
         0%,
-        40% {
+        35% {
           transform: rotate(0deg);
         }
-        60%,
+        65%,
         100% {
-          transform: rotate(90deg);
+          transform: rotate(-90deg);
         }
       }
 
       @media (prefers-reduced-motion: reduce) {
-        .orientation-gate__icon {
+        .orientation-gate__device {
           animation: none;
+          transform: rotate(-90deg);
         }
       }
     </style>
@@ -132,11 +140,43 @@
 
   <body>
     <div id="orientation-gate" role="alertdialog" aria-live="polite" data-visible="false">
-      <div class="orientation-gate__icon" aria-hidden="true"></div>
+      <svg
+        class="orientation-gate__phone"
+        viewBox="0 0 96 96"
+        aria-hidden="true"
+        focusable="false"
+      >
+        <!-- Sombra por hachura a 45° sobre o papel, fixa: é o lugar onde o aparelho deita. -->
+        <g stroke="var(--zinc-500)" stroke-width="2" stroke-linecap="round">
+          <path d="M18 78 L30 66" />
+          <path d="M26 80 L42 64" />
+          <path d="M36 80 L52 64" />
+          <path d="M46 80 L62 64" />
+          <path d="M56 80 L72 64" />
+          <path d="M66 80 L80 66" />
+        </g>
+        <g class="orientation-gate__device">
+          <!-- Corpo entalhado: lados com barriga e um canto que passa do ponto. -->
+          <path
+            fill="var(--zinc-950)"
+            d="M31 13 C40 11.6 52 12 64.6 12.8 C65.8 30 66.4 52 65.4 83.2 C54 84.6 42 84.2 31.2 83.4 C29.8 64 30 36 30.4 14.6 L28.6 12.2 Z"
+          />
+          <!-- Tela em papel. -->
+          <path
+            fill="var(--zinc-50)"
+            d="M36 21 C44 20.2 52 20.4 59.6 21.2 C60.2 38 60.4 56 59.8 72.4 C52 73 44 72.8 36.2 72.2 C35.6 56 35.6 38 36 21 Z"
+          />
+          <!-- Goivadas na massa preta (xilo-guidelines §9.1). -->
+          <path fill="var(--zinc-50)" d="M33 30 C33.9 33 34 37 33 40 C32.3 37 32.3 33 33 30 Z" />
+          <path fill="var(--zinc-50)" d="M62.6 50 C63.4 53 63.4 57 62.7 60 C62 57 62 53 62.6 50 Z" />
+          <path fill="var(--zinc-50)" d="M42 16.2 C45 15.5 49 15.6 52 16.4 C49 17.1 45 17 42 16.2 Z" />
+          <!-- Botão do aparelho. -->
+          <path fill="var(--zinc-50)" d="M45.6 77.4 C47.4 76.8 49.4 76.9 50.8 77.6 C49.4 79.4 47 79.4 45.6 77.4 Z" />
+        </g>
+      </svg>
       <h1 class="orientation-gate__title">Gire o celular</h1>
       <p class="orientation-gate__text">
-        A Aposentadoria de Muri só roda na horizontal. Vire o aparelho para deitado para
-        continuar.
+        A Aposentadoria de Muri só roda na horizontal. Deite o aparelho para começar.
       </p>
     </div>
 

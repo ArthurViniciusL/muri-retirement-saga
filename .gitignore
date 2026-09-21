@@ -42,3 +42,4 @@ __pycache__/
 *.pyc
 
 .claude/
+.hermes/
