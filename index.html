@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#18181B" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta
+      name="description"
+      content="A Aposentadoria de Muri — jogo de plataforma 2D dos 50 anos de Muricarliton."
+    />
+    <title>A Aposentadoria de Muri</title>
+
+    <style>
+      /* Paleta zinc — Guia de Estilo §2. Sem cor fora da escala. */
+      :root {
+        --zinc-50: #fafafa;
+        --zinc-100: #f4f4f5;
+        --zinc-400: #a1a1aa;
+        --zinc-700: #3f3f46;
+        --zinc-900: #18181b;
+        --zinc-950: #09090b;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: var(--zinc-950);
+        color: var(--zinc-50);
+        font-family: ui-monospace, "Courier New", monospace;
+        /* Jogo touch: sem seleção, sem zoom por duplo toque, sem pull-to-refresh. */
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-touch-callout: none;
+        -webkit-tap-highlight-color: transparent;
+        touch-action: none;
+        overscroll-behavior: none;
+      }
+
+      #game-root {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #game-root canvas {
+        /* Pixel art: ampliação sem suavização — Guia de Estilo §3 e §4. */
+        image-rendering: pixelated;
+        display: block;
+      }
+
+      /* Aviso de orientação — System Design §14: landscape obrigatório. */
+      #orientation-gate {
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.25rem;
+        padding: 2rem;
+        text-align: center;
+        background: var(--zinc-950);
+      }
+
+      #orientation-gate[data-visible="true"] {
+        display: flex;
+      }
+
+      #orientation-gate[data-visible="true"] ~ #game-root {
+        visibility: hidden;
+      }
+
+      .orientation-gate__icon {
+        width: 4.5rem;
+        height: 4.5rem;
+        border: 4px solid var(--zinc-50);
+        border-radius: 0.5rem;
+        animation: rotate-hint 2s ease-in-out infinite;
+      }
+
+      .orientation-gate__title {
+        margin: 0;
+        font-size: 1.125rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--zinc-50);
+      }
+
+      .orientation-gate__text {
+        margin: 0;
+        max-width: 28ch;
+        font-size: 0.875rem;
+        line-height: 1.6;
+        color: var(--zinc-400);
+      }
+
+      @keyframes rotate-hint {
+        0%,
+        40% {
+          transform: rotate(0deg);
+        }
+        60%,
+        100% {
+          transform: rotate(90deg);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .orientation-gate__icon {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="orientation-gate" role="alertdialog" aria-live="polite" data-visible="false">
+      <div class="orientation-gate__icon" aria-hidden="true"></div>
+      <h1 class="orientation-gate__title">Gire o celular</h1>
+      <p class="orientation-gate__text">
+        A Aposentadoria de Muri só roda na horizontal. Vire o aparelho para deitado para
+        continuar.
+      </p>
+    </div>
+
+    <div id="game-root"></div>
+
+    <script>
+      // Checagem de orientação — System Design §14.
+      // O lock real via Screen Orientation API só funciona em fullscreen no Chrome
+      // mobile, então a estratégia é detectar portrait e bloquear com este aviso.
+      (function () {
+        var gate = document.getElementById('orientation-gate');
+
+        function isPortrait() {
+          // A proporção do viewport é o que de fato decide se cabe um jogo
+          // side-scrolling, então ela manda. A Screen Orientation API entra só como
+          // reforço: em alguns contextos (emulação de dispositivo, webviews) ela
+          // reporta um valor defasado que não corresponde ao viewport real.
+          if (window.innerHeight > window.innerWidth) {
+            return true;
+          }
+          var orientation = window.screen && window.screen.orientation;
+          if (orientation && typeof orientation.type === 'string') {
+            return orientation.type.indexOf('portrait') === 0;
+          }
+          return false;
+        }
+
+        function sync() {
+          gate.setAttribute('data-visible', isPortrait() ? 'true' : 'false');
+        }
+
+        window.addEventListener('resize', sync);
+        // Em orientationchange as dimensões podem chegar defasadas um frame.
+        window.addEventListener('orientationchange', function () {
+          sync();
+          window.requestAnimationFrame(sync);
+        });
+        sync();
+      })();
+    </script>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
