@@ -10,7 +10,7 @@
  */
 import Phaser from 'phaser';
 
-// Stub: só registra a chave para o "Iniciar" do menu ter destino.
+// Stub: só registra a chave para a seleção de fases ter destino.
 export class Phase1Scene extends Phaser.Scene {
   public constructor() {
     super('Phase1Scene');

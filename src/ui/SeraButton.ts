@@ -1,40 +1,29 @@
-/**
- * SeraButton — botão no estilo Sera do shadcn, tema neutral.
- *
- * Responsabilidade: desenhar o `Button` variante default (fundo `primary`
- * neutral-900, rótulo `primary-foreground` neutral-50, cantos retos, caixa alta com
- * tracking largo), reagir a hover e toque e, opcionalmente, pulsar para chamar o
- * toque. O `hover:bg-primary/80` vira um tom sólido equivalente, porque o jogo não
- * usa transparência.
- *
- * É um Container centrado no botão, para que escala (pulse, entrada) parta do meio.
- *
- * Referência: `apps/v4/registry/styles/style-sera.css` (shadcn), `.cn-button`;
- * `.agents/rules/art-pseudo-pixel-art.md`.
- */
 import Phaser from 'phaser';
 import { gsap } from 'gsap';
-import { neutral } from '@/config/palette';
+import { neutral, zinc } from '@/config/palette';
 import { PixelFont } from '@/ui/PixelFont';
 
-// Tamanho default do Sera (h-10, px-6, text-xs, tracking-widest,
-// active:translate-y-px), convertido para a escala do jogo.
+// Sera default (h-10, px-6, text-xs, tracking-widest, active:translate-y-px) na escala do jogo.
 const HEIGHT = 64;
 const PADDING_X = 40;
 const LABEL_SCALE = 3;
 const LABEL_TRACKING = 3; // tracking-widest ≈ 0.1em
 const PRESS_OFFSET = 2;
+// neutral-900 e não o token `border` (neutral-200) do Sera, que some sobre o papel.
+const OUTLINE_BORDER = 2;
 
 const PULSE_SCALE = 1.06;
 const PULSE_DURATION_S = 0.8;
 
 type ButtonState = 'idle' | 'hover' | 'active';
+export type SeraButtonVariant = 'default' | 'outline';
 
 export interface SeraButtonOptions {
   centerX: number;
   top: number;
   label: string;
   onPress: () => void;
+  variant?: SeraButtonVariant;
 }
 
 export class SeraButton extends Phaser.GameObjects.Container {
@@ -43,13 +32,16 @@ export class SeraButton extends Phaser.GameObjects.Container {
   private readonly face: Phaser.GameObjects.Graphics;
   private readonly label: Phaser.GameObjects.BitmapText;
   private readonly faceWidth: number;
+  private readonly variant: SeraButtonVariant;
   private pulse: gsap.core.Tween | undefined;
 
-  public constructor(scene: Phaser.Scene, { centerX, top, label, onPress }: SeraButtonOptions) {
+  public constructor(scene: Phaser.Scene, { centerX, top, label, onPress, variant = 'default' }: SeraButtonOptions) {
     super(scene, centerX, top + HEIGHT / 2);
+    this.variant = variant;
 
+    const labelTone = variant === 'outline' ? 900 : 50;
     this.label = scene.make
-      .bitmapText({ font: PixelFont.keyFor(50), text: label.toUpperCase(), size: PixelFont.sizeFor(LABEL_SCALE) }, false)
+      .bitmapText({ font: PixelFont.keyFor(labelTone), text: label.toUpperCase(), size: PixelFont.sizeFor(LABEL_SCALE) }, false)
       .setLetterSpacing(LABEL_TRACKING)
       .setOrigin(0.5);
     this.faceWidth = Math.round(this.label.width + PADDING_X * 2);
@@ -62,7 +54,6 @@ export class SeraButton extends Phaser.GameObjects.Container {
     scene.add.existing(this);
   }
 
-  /** Pulso contínuo de escala. Pausa sozinho enquanto o botão está pressionado. */
   public startPulse(): void {
     this.pulse = gsap.to(this, {
       scale: PULSE_SCALE,
@@ -96,10 +87,23 @@ export class SeraButton extends Phaser.GameObjects.Container {
 
   private render(state: ButtonState): void {
     const offset = state === 'active' ? PRESS_OFFSET : 0;
-    this.face
-      .clear()
-      .fillStyle(state === 'idle' ? neutral.primary : neutral.primaryHover, 1)
-      .fillRect(-this.faceWidth / 2, -HEIGHT / 2 + offset, this.faceWidth, HEIGHT);
+    const face = new Phaser.Geom.Rectangle(-this.faceWidth / 2, -HEIGHT / 2 + offset, this.faceWidth, HEIGHT);
+    this.face.clear();
+    if (this.variant === 'outline') {
+      this.drawOutlineFace(face, state === 'idle' ? zinc[50] : neutral.muted);
+    } else {
+      this.drawSolidFace(face, state === 'idle' ? neutral.primary : neutral.primaryHover);
+    }
     this.label.setY(offset);
+  }
+
+  private drawSolidFace(face: Phaser.Geom.Rectangle, fill: number): void {
+    this.face.fillStyle(fill, 1).fillRectShape(face);
+  }
+
+  private drawOutlineFace(face: Phaser.Geom.Rectangle, fill: number): void {
+    const inner = Phaser.Geom.Rectangle.Clone(face);
+    Phaser.Geom.Rectangle.Inflate(inner, -OUTLINE_BORDER, -OUTLINE_BORDER);
+    this.face.fillStyle(neutral.primary, 1).fillRectShape(face).fillStyle(fill, 1).fillRectShape(inner);
   }
 }

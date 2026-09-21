@@ -33,6 +33,7 @@ export const gameConfig = {
   },
   audio: {
     startMenuVolume: 0.5,
+    uiClickVolume: 0.7,
   },
 } as const;
 
