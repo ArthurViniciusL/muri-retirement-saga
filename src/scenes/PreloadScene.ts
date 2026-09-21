@@ -6,3 +6,40 @@
  *
  * Referência: System Design §3 (Arquitetura de cenas), §16 (Pipeline de assets).
  */
+import Phaser from 'phaser';
+import { zinc } from '@/config/palette';
+
+const BAR_WIDTH = 384;
+const BAR_HEIGHT = 16;
+const BAR_BORDER = 4;
+
+export class PreloadScene extends Phaser.Scene {
+  public constructor() {
+    super('PreloadScene');
+  }
+
+  public preload(): void {
+    const { width, height } = this.scale.gameSize;
+    const x = Math.round((width - BAR_WIDTH) / 2);
+    const y = Math.round((height - BAR_HEIGHT) / 2);
+
+    const frame = this.add.graphics();
+    frame.fillStyle(zinc[950], 1);
+    frame.fillRect(x - BAR_BORDER, y - BAR_BORDER, BAR_WIDTH + BAR_BORDER * 2, BAR_HEIGHT + BAR_BORDER * 2);
+    frame.fillStyle(zinc[50], 1);
+    frame.fillRect(x, y, BAR_WIDTH, BAR_HEIGHT);
+
+    const fill = this.add.graphics();
+    this.load.on(Phaser.Loader.Events.PROGRESS, (progress: number) => {
+      fill.clear();
+      fill.fillStyle(zinc[950], 1);
+      fill.fillRect(x, y, Math.round(BAR_WIDTH * progress), BAR_HEIGHT);
+    });
+
+    // Ainda não há assets de fase; sprites, tilemaps e a 1ª onda de áudio entram aqui.
+  }
+
+  public create(): void {
+    this.scene.start('MenuScene');
+  }
+}

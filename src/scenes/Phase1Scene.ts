@@ -8,3 +8,11 @@
  *
  * Referência: System Design §3, §13 (PhaseConfig), §20 (Level design — Fase 1).
  */
+import Phaser from 'phaser';
+
+// Stub: só registra a chave para o "Iniciar" do menu ter destino.
+export class Phase1Scene extends Phaser.Scene {
+  public constructor() {
+    super('Phase1Scene');
+  }
+}

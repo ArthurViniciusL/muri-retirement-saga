@@ -7,6 +7,12 @@
       "skillPath": "skills/caveman/SKILL.md",
       "computedHash": "43ab924e4422a09c24d16dc81349771513bc801c1be21077c252952fe753e6b6"
     },
+    "clean-code": {
+      "source": "sickn33/agentic-awesome-skills",
+      "sourceType": "github",
+      "skillPath": "skills/clean-code/SKILL.md",
+      "computedHash": "5dc34cc80c81f909fa69923bfdaa90b6579f3b9842e059be9c2378483605a00f"
+    },
     "frontend-design": {
       "source": "anthropics/skills",
       "sourceType": "github",
@@ -36,6 +42,12 @@
       "sourceType": "github",
       "skillPath": "plugins/javascript-typescript/skills/typescript-advanced-types/SKILL.md",
       "computedHash": "8cbf2bf600f392d7260e476e3202932a876e2281cda3b15a8b6a5a43f383252d"
+    },
+    "typescript-best-practices": {
+      "source": "cursor/plugins",
+      "sourceType": "github",
+      "skillPath": "pstack/skills/typescript-best-practices/SKILL.md",
+      "computedHash": "b987c46f03f6c918110c2c198aa49fdd39e126f23ba75ae75fb8efe84625e397"
     },
     "vercel-composition-patterns": {
       "source": "vercel-labs/agent-skills",
