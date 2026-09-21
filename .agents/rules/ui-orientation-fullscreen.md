@@ -10,14 +10,15 @@ tags: ui, mobile, orientation
 The game is landscape only. A portrait device shows the warning screen that already
 exists in `index.html`; the game does not start behind it.
 
-Fullscreen requires a user gesture, so it is requested from the "Play" tap in
-`MenuScene`, never on boot:
+Fullscreen requires a user gesture, so it is requested from the "Iniciar" tap in
+`MenuScene`, never on boot. The tap opens `PhaseSelectScene`, which is already inside
+the fullscreen session:
 
 ```ts
 playButton.once('pointerup', () => {
   this.scale.startFullscreen();
   void screen.orientation?.lock?.('landscape').catch(() => undefined);
-  this.scene.start('Phase1Scene');
+  this.scene.start('PhaseSelectScene');
 });
 ```
 

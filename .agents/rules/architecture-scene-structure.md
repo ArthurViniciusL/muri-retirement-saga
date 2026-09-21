@@ -1,15 +1,20 @@
 ---
-title: Nine Scenes, Puzzle as a Paused Overlay
+title: Ten Scenes, Puzzle as a Paused Overlay
 impact: HIGH
 impactDescription: keeps phase state intact across the puzzle minigame
 tags: architecture, phaser, scenes
 ---
 
-## Nine Scenes, Puzzle as a Paused Overlay
+## Ten Scenes, Puzzle as a Paused Overlay
 
-The game has exactly nine scenes: `BootScene`, `PreloadScene`, `MenuScene`,
-`Phase1Scene`, `Phase2Scene`, `Phase3Scene`, `PuzzleScene`, `GameOverScene`,
-`VictoryScene`. Do not add scenes without a rule change.
+The game has exactly ten scenes: `BootScene`, `PreloadScene`, `MenuScene`,
+`PhaseSelectScene`, `Phase1Scene`, `Phase2Scene`, `Phase3Scene`, `PuzzleScene`,
+`GameOverScene`, `VictoryScene`. Do not add scenes without a rule change.
+
+`PhaseSelectScene` sits between the cover and the phases. "Iniciar" on the cover opens
+it, and completing a phase returns to it until all three phases are done; the last
+completion goes to `VictoryScene`. Which phases are completed or unlocked lives in
+`PhaseProgress`, in memory only.
 
 `PuzzleScene` is an overlay. Launch it with `scene.launch` and pause the active phase
 with `scene.pause`. Never use `scene.start`, which destroys the phase and loses the

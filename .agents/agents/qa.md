@@ -50,7 +50,7 @@ invincibility.
 
 **Architecture**
 
-- Exactly nine scenes. No tenth.
+- Exactly ten scenes, `PhaseSelectScene` included. No eleventh.
 - `PuzzleScene` is launched with `scene.launch` over a paused phase, never
   `scene.start`. After the puzzle, position, coins and hearts survive.
 - Phase scenes differ only through `PhaseConfig`. Any `scene.key` branch is a defect.
