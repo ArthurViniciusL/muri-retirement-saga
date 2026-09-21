@@ -28,6 +28,7 @@ Does not own:
 
 - `.agents/rules/architecture-client-only.md` (no backend, no persistence, no CDN)
 - `.agents/rules/architecture-git-authorization.md`
+- `.agents/rules/architecture-browser-authorization.md` (no test browser unasked)
 - `.agents/rules/code-typescript-conventions.md` (what lint enforces)
 - `.agents/rules/audio-style-and-loading.md` (dual format, two loading waves)
 - `.agents/docs/system-design.md` (§1 architecture, §2 stack, §19 out of scope)
@@ -107,8 +108,8 @@ fine.
 1. Read the current config files before changing one. Never upgrade from memory of what
    the versions were.
 2. Make the change, then run `yarn build` and `yarn lint` and read both outputs fully.
-3. For anything touching output or assets, also run `yarn preview` and load the built
-   game.
+3. For anything touching output or assets, ask the owner before running `yarn preview`
+   and loading the built game in a browser (`architecture-browser-authorization.md`).
 4. Report what changed, what the build produced, and any size or load risk you saw.
 
 ### When to stop and ask

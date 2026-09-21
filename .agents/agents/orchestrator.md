@@ -24,12 +24,15 @@ Does not own:
   owner; it never settles the question itself.
 - Git operations. Those need the owner's explicit authorization
   (`architecture-git-authorization.md`).
+- Opening or driving a test browser. That needs the owner's explicit authorization
+  (`architecture-browser-authorization.md`).
 
 ## Reference documents
 
 - `.agents/rules/architecture-source-of-truth.md` (precedence and locked decisions —
   highest authority)
 - `.agents/rules/architecture-git-authorization.md` (nothing is committed unasked)
+- `.agents/rules/architecture-browser-authorization.md` (no test browser unasked)
 - `.agents/rules/content-open-decisions.md` (the known gaps)
 - `.agents/rules/_sections.md` (how the rule set is organised)
 - `.agents/docs/system-design.md` (scope, §17 game flow, §19 out of scope)
