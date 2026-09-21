@@ -39,6 +39,7 @@ Motor escolhido: **Phaser.js 3.x**, pela física de plataforma pronta (Arcade Ph
 | `BootScene` | Carrega assets essenciais (loading bar) |
 | `PreloadScene` | Carrega sprites, tilemaps, áudio de todas as fases |
 | `MenuScene` | Tela inicial |
+| `PhaseSelectScene` | Phase select screen: shows which phases are completed, unlocked or locked, and starts the chosen phase |
 | `Phase1Scene` | Platforming temático em instrumentos |
 | `Phase2Scene` | Platforming temático em vídeo games/Xbox |
 | `Phase3Scene` | Platforming temático em moedas |
@@ -226,23 +227,34 @@ interface PhaseConfig {
 
 ```mermaid
 flowchart TD
-    Menu --> F1[Fase 1: Platforming]
+    Menu -->|Iniciar| S[Seleção de fases]
+    S -->|Voltar| Menu
+    S -->|fase liberada ou concluída| F1[Fase 1: Platforming]
+    S -->|fase liberada ou concluída| F2[Fase 2: Platforming]
+    S -->|fase liberada ou concluída| F3[Fase 3: Platforming]
     F1 --> P1[Puzzle: Instrumentos]
     P1 -->|3 pares em até 2min| I1[Item: Instrumento]
     P1 -->|falha/timeout| P1
-    I1 --> F2[Fase 2: Platforming]
+    I1 -->|libera Fase 2| S
     F2 --> P2[Puzzle: Xbox]
     P2 -->|3 pares em até 2min| I2[Item: 3 CDs]
     P2 -->|falha/timeout| P2
-    I2 --> F3[Fase 3: Platforming]
+    I2 -->|libera Fase 3| S
     F3 --> P3[Puzzle: Moedas]
     P3 -->|3 pares em até 2min| I3[Item: Dinheiro da aposentadoria]
     P3 -->|falha/timeout| P3
-    I3 --> V[Vitória: Muri na praia]
+    I3 -->|fases restantes| S
+    I3 -->|3 fases concluídas| V[Vitória: Muri na praia]
     F1 -.5 corações a 0.-> F1
     F2 -.5 corações a 0.-> F2
     F3 -.5 corações a 0.-> F3
 ```
+
+The phase select screen sits between the cover and the phases. Phase 1 is always
+unlocked; each later phase unlocks when the one before it is completed. Completed phases
+can be replayed without changing progress. Completing a phase returns to the select
+screen until all three are completed, and the last completion leads to victory. Progress
+lives in memory only and a page reload resets it.
 
 ## 18. Pontos em aberto (não bloqueantes para o desenvolvimento)
 

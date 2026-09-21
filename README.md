@@ -61,7 +61,7 @@ traz o aviso de orientação portrait). Nenhum asset de arte foi produzido.
 
 ```
 src/
-  scenes/      Boot, Preload, Menu, Phase1–3, Puzzle, GameOver, Victory
+  scenes/      Boot, Preload, Menu, PhaseSelect, Phase1–3, Puzzle, GameOver, Victory
   entities/    Player + enemies/ (Bat, WildCat, Fireball) + thieves/ (Thief, Maryana, Mayra, Weruska)
   systems/     PlayerStateMachine, HealthSystem, CurrencySystem, AmmoSystem,
                InputController, DialogueSystem, MemoryPuzzleEngine

@@ -8,7 +8,7 @@ tags: code, typescript, conventions
 ## TypeScript Conventions
 
 `tsconfig.json` runs with `strict: true` and `yarn build` type-checks before bundling.
-On top of that, five conventions are enforced in review:
+On top of that, six conventions are enforced in review:
 
 1. **No `any`, and no `as` outside a type guard.** Phaser's types are complete enough;
    an assertion is a signal that the wrong object is being passed around.
@@ -20,6 +20,11 @@ On top of that, five conventions are enforced in review:
    timers, spawn positions and counts come from `gameConfig.ts` or `phasesConfig.ts`.
 5. **No user-facing text inside a scene or entity.** Dialogue and labels come from
    `src/data/`.
+6. **Comments are the exception, not the norm.** Code explains itself through names and
+   small functions. No file header blocks, and no comment that restates what a name or
+   a line already says. A comment is kept only for a non-obvious *why* the code cannot
+   express — a browser or platform quirk, or a deliberate deviation from a style token or
+   rule — and stays one or two lines long.
 
 **Incorrect:**
 

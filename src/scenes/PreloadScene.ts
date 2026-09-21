@@ -8,6 +8,7 @@
  */
 import Phaser from 'phaser';
 import { zinc } from '@/config/palette';
+import { UiSound } from '@/systems/UiSound';
 
 const BAR_WIDTH = 384;
 const BAR_HEIGHT = 16;
@@ -36,7 +37,8 @@ export class PreloadScene extends Phaser.Scene {
       fill.fillRect(x, y, Math.round(BAR_WIDTH * progress), BAR_HEIGHT);
     });
 
-    // Ainda não há assets de fase; sprites, tilemaps e a 1ª onda de áudio entram aqui.
+    UiSound.preload(this.load);
+    // Ainda não há assets de fase; sprites, tilemaps e o resto da 1ª onda de áudio entram aqui.
   }
 
   public create(): void {

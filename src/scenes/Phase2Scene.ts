@@ -8,3 +8,11 @@
  *
  * Referência: System Design §3, §13 (PhaseConfig), §20 (Level design — Fase 2).
  */
+import Phaser from 'phaser';
+
+// Stub: só registra a chave para a seleção de fases ter destino.
+export class Phase2Scene extends Phaser.Scene {
+  public constructor() {
+    super('Phase2Scene');
+  }
+}

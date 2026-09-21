@@ -10,6 +10,6 @@ export const menuText = {
   titleName: 'Muri',
   titleSubtitle: 'Retirement Saga',
   description:
-    'Muri quer se aposentar na praia. Atravesse três fases, recupere o instrumento, os jogos e o dinheiro da aposentadoria. Cuidado com as ladras no caminho.',
+    'Muri quer se aposentar na praia. Atravesse três fases, recupere o instrumento, os jogos e o dinheiro da aposentadoria. Cuidado com os obstaculos no caminho.',
   startLabel: 'Iniciar',
 } as const;
