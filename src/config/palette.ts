@@ -40,5 +40,6 @@ export function zincCss(tone: ZincTone): string {
 export const neutral = {
   primary: 0x171717, // neutral-900
   primaryHover: 0x444444,
+  muted: 0xf5f5f5, // neutral-100
   // `primary-foreground` (neutral-50) é idêntico a zinc-50; o rótulo usa a fonte zinc-50.
 } as const;
