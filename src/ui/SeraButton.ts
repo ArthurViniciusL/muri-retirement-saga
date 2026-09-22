@@ -24,6 +24,8 @@ export interface SeraButtonOptions {
   label: string;
   onPress: () => void;
   variant?: SeraButtonVariant;
+  /** Tones inverted for a dark field: the ink face of the default variant would vanish on it. */
+  onDark?: boolean;
 }
 
 export class SeraButton extends Phaser.GameObjects.Container {
@@ -33,13 +35,18 @@ export class SeraButton extends Phaser.GameObjects.Container {
   private readonly label: Phaser.GameObjects.BitmapText;
   private readonly faceWidth: number;
   private readonly variant: SeraButtonVariant;
+  private readonly onDark: boolean;
   private pulse: gsap.core.Tween | undefined;
 
-  public constructor(scene: Phaser.Scene, { centerX, top, label, onPress, variant = 'default' }: SeraButtonOptions) {
+  public constructor(
+    scene: Phaser.Scene,
+    { centerX, top, label, onPress, variant = 'default', onDark = false }: SeraButtonOptions,
+  ) {
     super(scene, centerX, top + HEIGHT / 2);
     this.variant = variant;
+    this.onDark = onDark;
 
-    const labelTone = variant === 'outline' ? 'ink' : 'bone';
+    const labelTone = variant === 'outline' || onDark ? 'ink' : 'bone';
     this.label = scene.make
       .bitmapText({ font: PixelFont.keyFor(labelTone), text: label.toUpperCase(), size: PixelFont.sizeFor(LABEL_SCALE) }, false)
       .setLetterSpacing(LABEL_TRACKING)
@@ -92,9 +99,16 @@ export class SeraButton extends Phaser.GameObjects.Container {
     if (this.variant === 'outline') {
       this.drawOutlineFace(face, state === 'idle' ? palette.bone : sera.muted);
     } else {
-      this.drawSolidFace(face, state === 'idle' ? sera.primary : sera.primaryHover);
+      this.drawSolidFace(face, this.solidFillFor(state));
     }
     this.label.setY(offset);
+  }
+
+  private solidFillFor(state: ButtonState): number {
+    if (this.onDark) {
+      return state === 'idle' ? palette.bone : sera.muted;
+    }
+    return state === 'idle' ? sera.primary : sera.primaryHover;
   }
 
   private drawSolidFace(face: Phaser.Geom.Rectangle, fill: number): void {

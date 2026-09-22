@@ -21,6 +21,14 @@ ui_heart_full.png
 ui_heart_empty.png
 ```
 
+A scenery prop with a single frame drops the action and the frame number and is named
+`<entity>.png`: `cactus.png`, `rock_formation.png`, `foliage.png`, `brick_wall.png`. A
+prop with frames keeps the full form, as in `coin_spin_01.png`.
+
+Upscale suffixes (`_8x`, `_24x`), capital letters and doubled extensions
+(`name.png.png`) never ship. Rename a third-party file on the way in; the file's own
+resolution is recorded in `.agents/docs/scenery-assets.md`, not in its name.
+
 Files live under `src/assets/sprites/`, tilemaps under `src/assets/tilemaps/`, audio
 under `src/assets/audio/`, following the folder structure in the system design.
 

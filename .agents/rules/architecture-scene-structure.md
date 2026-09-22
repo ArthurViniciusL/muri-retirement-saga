@@ -25,6 +25,10 @@ The three phase scenes share identical logic and differ only by their `PhaseConf
 entry. Behaviour that exists in one phase and not in another is a bug, unless the
 difference comes from configuration data.
 
+That shared logic lives in `PhaseScene`, a base class the three phase scenes extend. It
+is never registered in `main.ts` and has no scene key of its own, so the count above
+stays at ten.
+
 **Incorrect:**
 
 ```ts

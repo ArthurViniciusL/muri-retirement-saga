@@ -18,6 +18,9 @@ interface PhaseConfig {
   tilemapKey: string;
   worldHeight: number;                       // added: world is taller than the screen
   playerSpawn: { x: number; y: number };     // added
+  scenery: PhaseScenery;                     // added: tileset key and the two tile families
+  decoration: PhaseDecoration;               // added: seed, ground props, cloud prop
+  parallax: PhaseParallax;                   // added: sky and hill tones
   enemySpawns: EnemySpawn[];
   thiefEncounters: ThiefEncounter[];
   ammoPickups: { x: number; y: number }[];   // added
@@ -27,9 +30,16 @@ interface PhaseConfig {
 }
 ```
 
-Common coins are the exception: they are placed in the Tiled map, in an object layer
-named `coins`, not in this config. A phase carries dozens of coins, and they are
-positioned against the visible scenery.
+Common coins and scenery obstacles are the exception: they are placed in the Tiled map,
+in object layers named `coins` and `obstacles`, not in this config. A phase carries
+dozens of them, and they are positioned against the visible scenery. Each obstacle
+object carries its asset key as its type; the classification is in
+`gameplay-scenery-obstacles.md`.
+
+Decoration is neither in the config nor in the map. `decoration.seed` is a fixed string
+per phase, `decoration.clusterAround` names the obstacle the bushes grow around, and the
+scatter is computed from both at runtime, so every guest sees the same
+phase without hundreds of props in the map file.
 
 `puzzleThemeKey` values stay in Portuguese (`instrumentos`, `xbox`, `moedas`) because
 they key into existing content files under `src/data/puzzleThemes/`.

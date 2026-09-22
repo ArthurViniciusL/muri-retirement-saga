@@ -7,8 +7,14 @@
  * Referência: System Design §3 (Arquitetura de cenas), §16 (Pipeline de assets).
  */
 import Phaser from 'phaser';
+import phase1MapUrl from '@/assets/tilemaps/phase1.json?url';
 import { palette } from '@/config/palette';
+import { ControlTextures } from '@/systems/ControlTextures';
+import { DebugTextures } from '@/systems/DebugTextures';
+import { PlayerAssets } from '@/systems/PlayerAssets';
+import { SceneryAssets } from '@/systems/SceneryAssets';
 import { UiSound } from '@/systems/UiSound';
+import { HeartsHUD } from '@/ui/HeartsHUD';
 
 const BAR_WIDTH = 384;
 const BAR_HEIGHT = 16;
@@ -38,10 +44,16 @@ export class PreloadScene extends Phaser.Scene {
     });
 
     UiSound.preload(this.load);
-    // Ainda não há assets de fase; sprites, tilemaps e o resto da 1ª onda de áudio entram aqui.
+    SceneryAssets.preload(this.load);
+    PlayerAssets.preload(this.load);
+    HeartsHUD.preload(this.load);
+    this.load.tilemapTiledJSON('phase1', phase1MapUrl);
   }
 
   public create(): void {
+    ControlTextures.generate(this);
+    DebugTextures.generate(this);
+    PlayerAssets.registerAnimations(this.anims);
     this.scene.start('MenuScene');
   }
 }

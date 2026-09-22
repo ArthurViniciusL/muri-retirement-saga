@@ -7,8 +7,14 @@ tags: ui, input, mobile
 
 ## Virtual Controls
 
-Touch is the only input. `InputController.ts` abstracts it, and no scene reads raw
-pointer events.
+Touch is the input of the game as played at the party. `InputController.ts` abstracts
+it, and no scene reads raw pointer events.
+
+The keyboard is the desktop input, always available, never a substitute for the virtual
+controls: `A`/`D` or the arrow keys move, `S` or the down arrow crouches, `W`, the up
+arrow or the space bar jumps. Both sources are merged inside `InputController`, so a
+scene sees intents and never asks which device produced them. Every screen still has to
+be fully playable by touch alone.
 
 - **D-pad** bottom left: left, right, down (crouch). There is no up — jump is a button.
 - **Action buttons** bottom right: jump, melee attack, ranged attack, defend.

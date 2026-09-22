@@ -27,19 +27,42 @@ export const gameConfig = {
   physics: {
     gravityY: 1800,
     playerSpeed: 220,
-    jumpVelocity: -620,        // clears a platform 128 px (2 tiles) above
+    jumpVelocity: -840,        // peaks at about 196 px: clears a 128 px obstacle easily
+    jumpCutFactor: 0.45,       // rise kept when the jump intent is released
+    coyoteMs: 80,
+    jumpBufferMs: 100,
+    maxFallSpeed: 1200,
+    tileBias: 32,              // Arcade tunnelling guard at high fall speed
   },
   combat: {
     damageCooldownMs: 400,     // technical cooldown; there are no i-frames
     maxHearts: 5,
+  },
+  player: {
+    standing: { display: {...}, body: { width: 40, height: 88 } },
+    crouching: { display: {...}, body: { width: 40, height: 56 } },
+    crouchSpeedRatio: 0.5,
+  },
+  controls: { margin: 64, buttonSize: 128, buttonHitRadius: 72, /* … */ },
+  scenery: {
+    tileSize: 64,
+    maxObstacleHeight: 128,    // a full jump has to clear it
+    targets: {...},            // framed display size per asset key
+    decoration: {...},         // seeded scatter density and cloud band
+    parallax: {...},           // scroll factors and generated hill sizes
   },
   camera: {
     lerp: 0.12,
     deadzoneWidthRatio: 0.3,
     deadzoneHeightRatio: 0.4,
   },
+  debug: { enabled: true },    // player rectangle, overlay; off when Muri's art lands
 } as const;
 ```
+
+`scenery.targets` is art metadata, not tuning: it holds the display size each scenery
+image is framed to, so no scene ever calls `setDisplaySize` with a literal. It lives
+here because this file is the one place the project reads sizes from.
 
 **Incorrect:**
 
