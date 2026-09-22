@@ -39,7 +39,7 @@ Decisions taken after the design documents and binding from now on:
 | Decision | Value | Supersedes |
 | --- | --- | --- |
 | Sprite grid | 64×64 px, locked | `guidelines.md` §4 ("32 or 64, lock it later") |
-| Player sprite | 64×96 px | — |
+| Player sprite | owner's drawings, displayed 144 px tall; physics ×1.5 | the earlier 64×96 px |
 | Scene scale mode | `Scale.RESIZE`, logical height fixed at 576 | — |
 | Logical width | elastic, clamped to [1024, 1440] | — |
 | Rendering | pseudo pixel art: strict authoring, fractional display scale allowed | — |
@@ -47,6 +47,7 @@ Decisions taken after the design documents and binding from now on:
 | Thief encounters | placed in the tilemap, not random over time | `system-design.md` §9 |
 | Audio formats | `.ogg` + `.m4a` fallback, two-wave loading | — |
 | Coin placement | Tiled object layer named `coins` | — |
+| Cactus hazards | Tiled object layer named `cacti`, point objects typed `cactus_001` / `cactus_002`; one heart per contact | — |
 
 **Incorrect:**
 

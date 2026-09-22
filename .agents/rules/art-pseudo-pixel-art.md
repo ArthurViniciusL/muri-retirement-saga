@@ -26,7 +26,9 @@ it up where it only costs screen space — in the final upscale.
 
 **Forbidden**, because it is what makes pseudo pixel art look like a mistake rather than
 a style: mixing resolutions. Text, HUD and puzzle cards render at the same world scale
-as everything else. No vector or high-resolution overlay on top of 64 px artwork.
+as everything else. No vector or high-resolution overlay on top of 64 px artwork. The
+one owner-approved exception is Muri, shown from high-resolution drawings with linear
+filtering (`art-grid-and-scale.md`).
 
 **Incorrect:**
 

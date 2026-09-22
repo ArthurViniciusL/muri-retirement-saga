@@ -1,13 +1,16 @@
-/**
- * PreloadScene — carga completa de conteúdo.
- *
- * Responsabilidade: carregar sprites/atlas, tilemaps (Tiled JSON) e áudio de todas
- * as fases, registrar as animações e seguir para a MenuScene ao concluir.
- *
- * Referência: System Design §3 (Arquitetura de cenas), §16 (Pipeline de assets).
- */
 import Phaser from 'phaser';
 import { zinc } from '@/config/palette';
+import cactus001Url from '@/assets/sprites/cactus_001.png';
+import cactus002Url from '@/assets/sprites/cactus_002.png';
+import sunUrl from '@/assets/sprites/sun.png';
+import heartEmptyUrl from '@/assets/sprites/ui_heart_empty.png';
+import heartFullUrl from '@/assets/sprites/ui_heart_full.png';
+import phase1Map from '@/assets/tilemaps/phase1.json?url';
+import { phasesConfig } from '@/config/phasesConfig';
+import { EnemyAnimations } from '@/systems/EnemyAnimations';
+import { MuriAnimations } from '@/systems/MuriAnimations';
+import { PlaceholderTextures, textureKeys } from '@/systems/PlaceholderTextures';
+import { ThemeTiles } from '@/systems/ThemeTiles';
 import { UiSound } from '@/systems/UiSound';
 
 const BAR_WIDTH = 384;
@@ -38,10 +41,24 @@ export class PreloadScene extends Phaser.Scene {
     });
 
     UiSound.preload(this.load);
-    // Ainda não há assets de fase; sprites, tilemaps e o resto da 1ª onda de áudio entram aqui.
+    this.load.tilemapTiledJSON(phasesConfig.phase1.tilemapKey, phase1Map);
+    ThemeTiles.preload(this.load, phasesConfig.phase1.puzzleThemeKey);
+    MuriAnimations.preload(this.load);
+    EnemyAnimations.preload(this.load);
+    this.load.image(textureKeys.sun, sunUrl);
+    this.load.image(textureKeys.heartFull, heartFullUrl);
+    this.load.image(textureKeys.heartEmpty, heartEmptyUrl);
+    const [cactus001, cactus002] = textureKeys.cacti;
+    this.load.image(cactus001, cactus001Url);
+    this.load.image(cactus002, cactus002Url);
   }
 
   public create(): void {
+    ThemeTiles.compose(this, phasesConfig.phase1.puzzleThemeKey);
+    MuriAnimations.register(this);
+    EnemyAnimations.register(this);
+    this.textures.get(textureKeys.sun).setFilter(Phaser.Textures.FilterMode.LINEAR);
+    PlaceholderTextures.generate(this);
     this.scene.start('MenuScene');
   }
 }

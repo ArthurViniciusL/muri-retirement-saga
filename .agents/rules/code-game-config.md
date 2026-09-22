@@ -27,7 +27,16 @@ export const gameConfig = {
   physics: {
     gravityY: 1800,
     playerSpeed: 220,
-    jumpVelocity: -620,        // clears a platform 128 px (2 tiles) above
+    jumpVelocity: -720,        // peak ≈ 144 px: clears a platform 128 px (2 tiles) above
+    jumpCutFactor: 0.45,       // releasing jump while rising multiplies the rise once
+    coyoteMs: 80,
+    jumpBufferMs: 100,
+    maxFallSpeed: 1200,        // 20 px per 60 Hz step, safely under tileBias
+    tileBias: 32,              // Arcade default (16) lets a long fall pass through the ground
+  },
+  player: {
+    standingBody: { width: 40, height: 88 },
+    crouchingBody: { width: 40, height: 56 },
   },
   combat: {
     damageCooldownMs: 400,     // technical cooldown; there are no i-frames
@@ -38,13 +47,25 @@ export const gameConfig = {
     deadzoneWidthRatio: 0.3,
     deadzoneHeightRatio: 0.4,
   },
+  parallax: {
+    farScrollFactor: 0.25,     // per ui-parallax.md
+    midScrollFactor: 0.5,
+  },
+  controls: {
+    margin: 64,                // from every screen edge
+    buttonSize: 128,
+    buttonHitRadius: 72,       // circle larger than the 128 px button
+    buttonGap: 16,
+    pauseSize: 64,
+    pauseHitSize: 96,
+  },
 } as const;
 ```
 
 **Incorrect:**
 
 ```ts
-this.body.setVelocityY(-620); // same number will be re-typed, and drift, elsewhere
+this.body.setVelocityY(-720); // same number will be re-typed, and drift, elsewhere
 ```
 
 **Correct:**

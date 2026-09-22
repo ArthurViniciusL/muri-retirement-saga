@@ -44,6 +44,7 @@ Motor escolhido: **Phaser.js 3.x**, pela física de plataforma pronta (Arcade Ph
 | `Phase2Scene` | Platforming temático em vídeo games/Xbox |
 | `Phase3Scene` | Platforming temático em moedas |
 | `PuzzleScene` | Minigame de jogo da memória — sobreposta, pausa a cena de fase ativa |
+| `PauseScene` | Pause menu over the paused phase: continue, restart the phase or return to the phase select screen |
 | `GameOverScene` | Vida zerada — opção de reiniciar a fase atual do zero |
 | `VictoryScene` | Final: Muri na praia, com instrumento, aposentadoria e os 3 CDs |
 

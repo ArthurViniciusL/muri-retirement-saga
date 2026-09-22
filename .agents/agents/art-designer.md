@@ -83,7 +83,7 @@ without an outline between them.
 | Element | Size |
 | --- | --- |
 | Enemy or thief sprite | 64×64 |
-| Muri | 64×96 |
+| Muri | owner's drawings, displayed 144 px tall (`art-grid-and-scale.md`) |
 | Scenery tile | 64×64 |
 | HUD icon (heart, ammo, coin) | 32 |
 | Puzzle card | authored 64, displayed 96 |
@@ -101,7 +101,11 @@ overlay on top of 64 px artwork, including text and HUD.
 
 - **Muri**, facing right only, mirrored in code: idle 2–4 frames, walk 4–6, jump 3
   (rise, apex, fall), crouch 1–2, melee attack 2–3, ranged attack 2–3 plus a separate
-  projectile sprite, defend 1–2, hurt 1.
+  projectile sprite, defend 1–2, hurt 1. Muri's poses are the owner's own drawings, not
+  grid art (`art-grid-and-scale.md`, "Exception"). Do not assemble new poses by cutting,
+  rotating or recombining those drawings: the result was rejected. When a pose is
+  missing, the code uses an existing frame as a stand-in until the owner draws it; the
+  jump, for example, falls back to walk frames if `muri/jump/` is empty.
 - **Each enemy** — bat (flies), wild cat (runs on the ground), fireball (mid-screen):
   a movement loop of 2–4 frames plus a defeat animation of 2–3 frames, the woodcut
   bursting into fragments. Their three silhouettes must be distinguishable instantly,
@@ -123,7 +127,8 @@ overlay on top of 64 px artwork, including text and HUD.
 `<entity>_<action>_<frame>.png`, lower case, frame padded to two digits:
 `muri_idle_01.png`, `bat_fly_02.png`, `maryana_idle.png`,
 `puzzle_card_instrumento_violao.png`, `ui_heart_full.png`. Files go under
-`src/assets/sprites/`. Never ship a mirrored duplicate.
+`src/assets/sprites/`. Never ship a mirrored duplicate. Muri is the exception: his
+frames are `src/assets/sprites/muri/<folder>/NNN.png` or `.jpg` (`art-asset-naming.md`).
 
 ### Workflow
 

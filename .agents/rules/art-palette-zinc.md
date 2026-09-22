@@ -9,7 +9,8 @@ tags: art, palette, color
 
 The game is strictly monochrome, on the shadcn/Tailwind `zinc` scale. No hue outside
 this table appears anywhere in the game — not in sprites, tiles, HUD, puzzle cards or
-particles.
+particles. The single exception is Muri's frames, shown from the owner's drawings
+(`art-grid-and-scale.md`).
 
 | Tone | Hex | Use |
 | --- | --- | --- |

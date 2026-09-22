@@ -119,7 +119,7 @@ on the puzzle. `scene.start` destroys the phase and loses position, coins and he
 ### Working against missing art
 
 Art and code run in parallel. Build against placeholder rectangles drawn on the locked
-64 px grid — entities 64×64, Muri 64×96, tiles 64, HUD icons 32, puzzle cards authored
+64 px grid — entities 64×64, Muri 64×96 (the placeholder; real frames are displayed 144 px tall), tiles 64, HUD icons 32, puzzle cards authored
 64 and displayed 96, control buttons 128 — and load them under the final key names from
 `art-asset-naming.md`, so the art agent's files drop in without a code change.
 

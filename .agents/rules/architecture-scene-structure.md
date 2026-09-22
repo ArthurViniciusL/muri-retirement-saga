@@ -1,15 +1,18 @@
 ---
-title: Ten Scenes, Puzzle as a Paused Overlay
+title: Eleven Scenes, Puzzle and Pause as Paused Overlays
 impact: HIGH
 impactDescription: keeps phase state intact across the puzzle minigame
 tags: architecture, phaser, scenes
 ---
 
-## Ten Scenes, Puzzle as a Paused Overlay
+## Eleven Scenes, Puzzle and Pause as Paused Overlays
 
-The game has exactly ten scenes: `BootScene`, `PreloadScene`, `MenuScene`,
+The game has exactly eleven scenes: `BootScene`, `PreloadScene`, `MenuScene`,
 `PhaseSelectScene`, `Phase1Scene`, `Phase2Scene`, `Phase3Scene`, `PuzzleScene`,
-`GameOverScene`, `VictoryScene`. Do not add scenes without a rule change.
+`PauseScene`, `GameOverScene`, `VictoryScene`. Do not add scenes without a rule change.
+
+`PhaseScene` is the shared base class of the three phase scenes. It is never
+registered as a scene, so it does not count toward the eleven.
 
 `PhaseSelectScene` sits between the cover and the phases. "Iniciar" on the cover opens
 it, and completing a phase returns to it until all three phases are done; the last
@@ -21,9 +24,17 @@ with `scene.pause`. Never use `scene.start`, which destroys the phase and loses 
 player's position, collected coins and remaining hearts. When the puzzle ends, the
 phase resumes exactly where it stopped.
 
+`PauseScene` and `GameOverScene` use the same pattern: the phase pauses itself and
+launches the overlay, passing its own scene key. The overlay resumes, restarts or stops
+the phase through that key.
+
 The three phase scenes share identical logic and differ only by their `PhaseConfig`
 entry. Behaviour that exists in one phase and not in another is a bug, unless the
 difference comes from configuration data.
+
+Menu scenes restart themselves on a screen resize to redo their layout. Phase scenes do
+not: a restart would lose the run. On resize, a phase resizes its camera and re-anchors
+its screen-fixed UI instead.
 
 **Incorrect:**
 

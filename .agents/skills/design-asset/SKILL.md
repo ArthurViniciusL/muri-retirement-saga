@@ -59,7 +59,7 @@ each of them is load-bearing for readability.
 6. **Tone encodes interactivity.** Anything the player collides with or must touch lives
    in zinc-700..zinc-950. Anything decorative lives in zinc-50..zinc-500. Two adjacent
    tones never touch without an outline between them.
-7. **The grid is locked at 64.** Entity 64×64, Muri 64×96, tile 64×64, HUD icon 32,
+7. **The grid is locked at 64.** Entity 64×64, Muri from the owner's drawings (not on the grid), tile 64×64, HUD icon 32,
    puzzle card authored 64, virtual button 128. Broken sizes like 48 or 100 are
    forbidden — the tilemap must assemble without resampling.
 8. **Facing right only.** The left-facing version is a runtime mirror. Never save one.

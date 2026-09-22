@@ -13,8 +13,9 @@ no other file changes the player state directly.
 
 - **Idle / Walk** — horizontal D-pad input.
 - **Jump** — Arcade Physics gravity, single jump. There is no double jump.
-- **Crouch** — the down direction. It shrinks the hitbox, which dodges high attacks and
-  fits through low gaps in the tilemap.
+- **Crouch** — the down direction. It shrinks the hitbox, which dodges high attacks.
+  Muri cannot walk while crouched (owner's decision), so the tilemap has no low gaps
+  that must be crossed crouching.
 - **AttackMelee** — short hitbox in front of Muri, unlimited use, kills any enemy in one
   hit.
 - **AttackRanged** — spawns a projectile forward and consumes one ammo.

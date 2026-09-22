@@ -26,6 +26,12 @@ items, which opens `VictoryScene`. Common coins are secondary scoring only: they
 affect the victory condition, and the Phase 3 puzzle alone guarantees the retirement
 money.
 
+Holes are allowed. Falling below the bottom of the world kills Muri at once and opens
+`GameOverScene`; hearts do not soften it. Because a fall is fatal, a hole is never
+placed right after a vertical section or right after a jump that needs the full jump
+height, and the far edge of every hole is visible before Muri reaches the near edge.
+Phase 1 has one or two holes, 2 tiles wide.
+
 **All of these numbers are tuning.** They live in `phasesConfig.ts` and in the Tiled
 maps, and they are expected to change after the first playtest. None of them may be
 hardcoded in a scene. Enemy speed, detection range, patrol routes and exact ammo

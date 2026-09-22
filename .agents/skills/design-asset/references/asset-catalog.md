@@ -31,7 +31,9 @@ defect, not a convenience.
 
 ## Muri (playable)
 
-64×96 px (one tile wide, one and a half tall). Verifier role: `player`.
+Shown from the owner's drawings, displayed 144 px tall (`art-grid-and-scale.md`), not
+authored on the grid or checked by the verifier. Frames live in
+`src/assets/sprites/muri/<action>/NNN.png`.
 
 | Action | Key | Frames | What the frames are |
 | --- | --- | --- | --- |

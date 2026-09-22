@@ -8,7 +8,8 @@ tags: art, linework, texture
 ## Woodcut Linework and Hatching
 
 With no colour available, the stroke carries the whole visual language. It comes from
-the shared Cordel Arcade system and is stricter here.
+the shared Cordel Arcade system and is stricter here. Muri's frames are exempt: they
+are the owner's drawings, shown as drawn (`art-grid-and-scale.md`).
 
 - **Thick, slightly irregular lines.** Never perfectly smooth vectors, even at low
   resolution.

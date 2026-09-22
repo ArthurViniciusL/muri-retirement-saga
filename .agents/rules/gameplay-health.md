@@ -7,8 +7,9 @@ tags: gameplay, health, game-over
 
 ## Five Hearts, No Lives, No Continues
 
-Muri has five hearts. Contact with an environmental enemy costs one heart, subject to
-the 400 ms technical cooldown. At zero hearts the run goes to `GameOverScene`, which
+Muri has five hearts. Contact with an environmental enemy or a cactus costs one heart,
+subject to the 400 ms technical cooldown per source. Cacti are static hazards, not
+enemies: they cannot be killed and do not block movement. At zero hearts the run goes to `GameOverScene`, which
 restarts the **current phase from the beginning** — not from a checkpoint, and not from
 the first phase.
 
