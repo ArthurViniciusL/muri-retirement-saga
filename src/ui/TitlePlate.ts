@@ -8,11 +8,11 @@
  *
  * O container é centrado na placa, para que o carimbo escale a peça a partir do meio.
  *
- * Referência: xilo-guidelines §4.4–§4.6, §9, §9.1;
+ * Referência: guidelines.md §13–§16;
  * `.agents/rules/art-linework-and-texture.md`.
  */
 import Phaser from 'phaser';
-import { zinc } from '@/config/palette';
+import { palette } from '@/config/palette';
 import { PixelFont } from '@/ui/PixelFont';
 import { Woodcut, type Rect } from '@/ui/Woodcut';
 
@@ -54,18 +54,18 @@ export class TitlePlate extends Phaser.GameObjects.Container {
       area: { x: rect.x + SHADOW_OFFSET, y: rect.y + SHADOW_OFFSET, width: WIDTH + 2, height: HEIGHT + 2 },
       spacing: HATCH_SPACING,
       thickness: HATCH_THICKNESS,
-      color: zinc[500],
+      color: palette.sertao,
     });
 
     const carver = new Woodcut('muri-plate');
     const mass = scene.make.graphics({}, false);
-    mass.fillStyle(zinc[950], 1).fillPoints(carver.carvedRect(rect, CARVE), true);
+    mass.fillStyle(palette.ink, 1).fillPoints(carver.carvedRect(rect, CARVE), true);
 
     const nameText = this.makeTitleText(name, NAME_SCALE, rect.y + NAME_CENTER_Y);
     const subtitleText = this.makeTitleText(subtitle, SUBTITLE_SCALE, rect.y + SUBTITLE_CENTER_Y);
 
     const gouges = scene.make.graphics({}, false);
-    gouges.fillStyle(zinc[50], 1);
+    gouges.fillStyle(palette.bone, 1);
     carver
       .gougeMarks(rect, {
         ...GOUGES,
@@ -85,7 +85,7 @@ export class TitlePlate extends Phaser.GameObjects.Container {
   /** Texto cavado em papel, centrado em x na placa e em `centerY` na tela. */
   private makeTitleText(text: string, scale: number, centerY: number): Phaser.GameObjects.BitmapText {
     return this.scene.make
-      .bitmapText({ font: PixelFont.keyFor(50), text: text.toUpperCase(), size: PixelFont.sizeFor(scale) }, false)
+      .bitmapText({ font: PixelFont.keyFor('bone'), text: text.toUpperCase(), size: PixelFont.sizeFor(scale) }, false)
       .setOrigin(0.5)
       .setPosition(this.x, centerY);
   }

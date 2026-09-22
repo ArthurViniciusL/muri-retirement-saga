@@ -68,7 +68,7 @@ export class MenuScene extends Phaser.Scene {
     // `DynamicBitmapText` esconde letra por letra sem refazer a quebra de linha: o texto
     // centralizado não "anda" durante a digitação.
     const description = this.add
-      .dynamicBitmapText(centerX, 0, PixelFont.keyFor(900), menuText.description, PixelFont.sizeFor(DESCRIPTION_SCALE))
+      .dynamicBitmapText(centerX, 0, PixelFont.keyFor('ink'), menuText.description, PixelFont.sizeFor(DESCRIPTION_SCALE))
       .setMaxWidth(DESCRIPTION_MAX_WIDTH)
       .setCenterAlign()
       .setOrigin(0.5, 0);

@@ -47,18 +47,18 @@ def heart_silhouette(tone: str) -> Canvas:
 
 def build_full() -> Canvas:
     # Light body so the heart reads as "filled" against the dark foreground layer.
-    canvas = heart_silhouette("zinc-100")
+    canvas = heart_silhouette("bone")
     # Shadow lives on the lower right, as woodcut hatching — never a gradient.
-    canvas.hatch(16, 14, 16, 16, "zinc-500", spacing=3)
-    canvas.outline("zinc-950")
+    canvas.hatch(16, 14, 16, 16, "sertao", spacing=3)
+    canvas.outline("ink")
     return canvas
 
 
 def build_empty() -> Canvas:
     # Same silhouette, paper-toned body, no shading: the contrast between the two states
     # is carried by tone, not by opacity.
-    canvas = heart_silhouette("zinc-50")
-    canvas.outline("zinc-950")
+    canvas = heart_silhouette("bone")
+    canvas.outline("ink")
     return canvas
 
 

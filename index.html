@@ -6,7 +6,7 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"
     />
-    <meta name="theme-color" content="#18181B" />
+    <meta name="theme-color" content="#1C1410" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -17,13 +17,11 @@
     <title>A Aposentadoria de Muri</title>
 
     <style>
-      /* Paleta zinc — Guia de Estilo §2. Sem cor fora da escala. */
+      /* Paleta Cordel Arcade — mesmos valores de src/config/palette.ts. */
       :root {
-        --zinc-50: #fafafa;
-        --zinc-100: #f4f4f5;
-        --zinc-500: #71717a;
-        --zinc-900: #18181b;
-        --zinc-950: #09090b;
+        --bone: #f4eedd;
+        --sertao: #6b4226;
+        --ink: #1c1410;
       }
 
       * {
@@ -37,8 +35,8 @@
         width: 100%;
         height: 100%;
         overflow: hidden;
-        background: var(--zinc-50);
-        color: var(--zinc-950);
+        background: var(--bone);
+        color: var(--ink);
         font-family: ui-monospace, "Courier New", monospace;
         /* Jogo touch: sem seleção, sem zoom por duplo toque, sem pull-to-refresh. */
         -webkit-user-select: none;
@@ -65,7 +63,7 @@
 
       /* Aviso de orientação — System Design §14: landscape obrigatório.
          Mesma linguagem da tela inicial: papel claro, entalhe preto, sombra por
-         hachura. Cantos assimétricos imitam o corte da goiva (xilo-guidelines §4.4). */
+         hachura. Cantos assimétricos imitam o corte da goiva (guidelines.md §13). */
       #orientation-gate {
         position: fixed;
         inset: 0;
@@ -77,8 +75,8 @@
         gap: 1.5rem;
         padding: 2rem;
         text-align: center;
-        background: var(--zinc-50);
-        color: var(--zinc-950);
+        background: var(--bone);
+        color: var(--ink);
       }
 
       #orientation-gate[data-visible="true"] {
@@ -105,8 +103,8 @@
         padding: 0.5rem 1.25rem 0.625rem;
         font-size: 1.25rem;
         font-weight: 700;
-        color: var(--zinc-50);
-        background: var(--zinc-950);
+        color: var(--bone);
+        background: var(--ink);
         border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
       }
 
@@ -115,7 +113,7 @@
         max-width: 26ch;
         font-size: 0.9375rem;
         line-height: 1.6;
-        color: var(--zinc-900);
+        color: var(--ink);
       }
 
       @keyframes rotate-hint {
@@ -147,7 +145,7 @@
         focusable="false"
       >
         <!-- Sombra por hachura a 45° sobre o papel, fixa: é o lugar onde o aparelho deita. -->
-        <g stroke="var(--zinc-500)" stroke-width="2" stroke-linecap="round">
+        <g stroke="var(--sertao)" stroke-width="2" stroke-linecap="round">
           <path d="M18 78 L30 66" />
           <path d="M26 80 L42 64" />
           <path d="M36 80 L52 64" />
@@ -158,20 +156,20 @@
         <g class="orientation-gate__device">
           <!-- Corpo entalhado: lados com barriga e um canto que passa do ponto. -->
           <path
-            fill="var(--zinc-950)"
+            fill="var(--ink)"
             d="M31 13 C40 11.6 52 12 64.6 12.8 C65.8 30 66.4 52 65.4 83.2 C54 84.6 42 84.2 31.2 83.4 C29.8 64 30 36 30.4 14.6 L28.6 12.2 Z"
           />
           <!-- Tela em papel. -->
           <path
-            fill="var(--zinc-50)"
+            fill="var(--bone)"
             d="M36 21 C44 20.2 52 20.4 59.6 21.2 C60.2 38 60.4 56 59.8 72.4 C52 73 44 72.8 36.2 72.2 C35.6 56 35.6 38 36 21 Z"
           />
-          <!-- Goivadas na massa preta (xilo-guidelines §9.1). -->
-          <path fill="var(--zinc-50)" d="M33 30 C33.9 33 34 37 33 40 C32.3 37 32.3 33 33 30 Z" />
-          <path fill="var(--zinc-50)" d="M62.6 50 C63.4 53 63.4 57 62.7 60 C62 57 62 53 62.6 50 Z" />
-          <path fill="var(--zinc-50)" d="M42 16.2 C45 15.5 49 15.6 52 16.4 C49 17.1 45 17 42 16.2 Z" />
+          <!-- Goivadas na massa preta (guidelines.md §15). -->
+          <path fill="var(--bone)" d="M33 30 C33.9 33 34 37 33 40 C32.3 37 32.3 33 33 30 Z" />
+          <path fill="var(--bone)" d="M62.6 50 C63.4 53 63.4 57 62.7 60 C62 57 62 53 62.6 50 Z" />
+          <path fill="var(--bone)" d="M42 16.2 C45 15.5 49 15.6 52 16.4 C49 17.1 45 17 42 16.2 Z" />
           <!-- Botão do aparelho. -->
-          <path fill="var(--zinc-50)" d="M45.6 77.4 C47.4 76.8 49.4 76.9 50.8 77.6 C49.4 79.4 47 79.4 45.6 77.4 Z" />
+          <path fill="var(--bone)" d="M45.6 77.4 C47.4 76.8 49.4 76.9 50.8 77.6 C49.4 79.4 47 79.4 45.6 77.4 Z" />
         </g>
       </svg>
       <h1 class="orientation-gate__title">Gire o celular</h1>

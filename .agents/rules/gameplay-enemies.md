@@ -1,7 +1,7 @@
 ---
 title: Three Enemy Types, Three Height Bands
 impact: MEDIUM
-impactDescription: makes threats readable at a glance in a monochrome palette
+impactDescription: makes threats readable at a glance by silhouette and tone
 tags: gameplay, enemies, readability
 ---
 

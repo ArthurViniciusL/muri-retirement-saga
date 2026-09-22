@@ -12,7 +12,7 @@ pergunta, não uma suposição.
 
 - [System Design](.agents/docs/system-design.md) — arquitetura técnica, máquina
   de estados do personagem, estrutura de fases, sistemas de jogo.
-- [Guia de Estilo](.agents/docs/guidelines.md) — paleta zinc, grid de
+- [Guia de Estilo](.agents/docs/guidelines.md) — paleta Cordel Arcade, grid de
   sprites, variações de asset necessárias.
 
 ## Stack
@@ -70,10 +70,13 @@ src/
   data/        puzzleThemes/ (instrumentos, xbox, moedas) + dialogueLines/ (maryana, mayra, weruska)
   assets/      sprites/, tilemaps/, audio/
   main.ts
-.agents/agents/ Placeholders dos papéis do fluxo de desenvolvimento
+AGENTS.md       Base comum de todos os agentes (CLAUDE.md apenas a importa)
+.agents/agents/ Os cinco agentes: game-designer, level-designer, game-artist,
+                ui-ux-designer, dev
 .agents/rules/  Regras normativas do projeto (em inglês), derivadas dos dois documentos
 .agents/docs/   System Design + Guia de Estilo
-.claude/skills/ Stubs das skills do projeto
+.agents/skills/ Skills do projeto
+.claude/        Symlinks para .agents/agents e .agents/skills, e comandos do OpenSpec
 ```
 
 ## TODOs abertos
@@ -82,12 +85,8 @@ src/
       de asset. O Guia de Estilo (§4) deixa a faixa em aberto e alerta que misturar as
       duas escalas quebra a proporção entre Muri, inimigos e cenário. Tiles de cenário
       precisam seguir o mesmo grid, e ícones de UI devem ser múltiplos dele.
-- [ ] Escrever os system prompts completos dos agentes em `.agents/` (hoje são apenas
-      placeholders com nome, objetivo e documentos de referência).
-- [ ] Escrever as instruções completas das skills em `.claude/skills/` (hoje são stubs
-      com frontmatter e descrição breve).
-- [ ] Alinhar com o design system compartilhado se a paleta monocromática zinc vale só
-      para o jogo ou se reflete de volta no documento geral (Guia de Estilo §1).
+- [ ] Revalidar com a designer os HEX da paleta Cordel Arcade e os tons derivados
+      (`art-palette-cordel.md`, `content-open-decisions.md` §1).
 - [ ] Definir velocidade, alcance de detecção e rotas de cada inimigo ambiental
       (System Design §18).
 - [ ] Definir quantidade e posicionamento exatos dos pickups de munição por fase

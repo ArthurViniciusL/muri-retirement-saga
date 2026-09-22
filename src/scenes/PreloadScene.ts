@@ -7,7 +7,7 @@
  * Referência: System Design §3 (Arquitetura de cenas), §16 (Pipeline de assets).
  */
 import Phaser from 'phaser';
-import { zinc } from '@/config/palette';
+import { palette } from '@/config/palette';
 import { UiSound } from '@/systems/UiSound';
 
 const BAR_WIDTH = 384;
@@ -25,15 +25,15 @@ export class PreloadScene extends Phaser.Scene {
     const y = Math.round((height - BAR_HEIGHT) / 2);
 
     const frame = this.add.graphics();
-    frame.fillStyle(zinc[950], 1);
+    frame.fillStyle(palette.ink, 1);
     frame.fillRect(x - BAR_BORDER, y - BAR_BORDER, BAR_WIDTH + BAR_BORDER * 2, BAR_HEIGHT + BAR_BORDER * 2);
-    frame.fillStyle(zinc[50], 1);
+    frame.fillStyle(palette.bone, 1);
     frame.fillRect(x, y, BAR_WIDTH, BAR_HEIGHT);
 
     const fill = this.add.graphics();
     this.load.on(Phaser.Loader.Events.PROGRESS, (progress: number) => {
       fill.clear();
-      fill.fillStyle(zinc[950], 1);
+      fill.fillStyle(palette.ink, 1);
       fill.fillRect(x, y, Math.round(BAR_WIDTH * progress), BAR_HEIGHT);
     });
 

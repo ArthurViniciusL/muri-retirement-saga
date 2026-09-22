@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { gsap } from 'gsap';
-import { neutral, zinc } from '@/config/palette';
+import { palette, sera } from '@/config/palette';
 import { PixelFont } from '@/ui/PixelFont';
 
 // Sera default (h-10, px-6, text-xs, tracking-widest, active:translate-y-px) na escala do jogo.
@@ -9,7 +9,7 @@ const PADDING_X = 40;
 const LABEL_SCALE = 3;
 const LABEL_TRACKING = 3; // tracking-widest ≈ 0.1em
 const PRESS_OFFSET = 2;
-// neutral-900 e não o token `border` (neutral-200) do Sera, que some sobre o papel.
+// Borda em tinta (`sera.primary`) e não o token `border` do Sera, que some sobre o papel.
 const OUTLINE_BORDER = 2;
 
 const PULSE_SCALE = 1.06;
@@ -39,7 +39,7 @@ export class SeraButton extends Phaser.GameObjects.Container {
     super(scene, centerX, top + HEIGHT / 2);
     this.variant = variant;
 
-    const labelTone = variant === 'outline' ? 900 : 50;
+    const labelTone = variant === 'outline' ? 'ink' : 'bone';
     this.label = scene.make
       .bitmapText({ font: PixelFont.keyFor(labelTone), text: label.toUpperCase(), size: PixelFont.sizeFor(LABEL_SCALE) }, false)
       .setLetterSpacing(LABEL_TRACKING)
@@ -90,9 +90,9 @@ export class SeraButton extends Phaser.GameObjects.Container {
     const face = new Phaser.Geom.Rectangle(-this.faceWidth / 2, -HEIGHT / 2 + offset, this.faceWidth, HEIGHT);
     this.face.clear();
     if (this.variant === 'outline') {
-      this.drawOutlineFace(face, state === 'idle' ? zinc[50] : neutral.muted);
+      this.drawOutlineFace(face, state === 'idle' ? palette.bone : sera.muted);
     } else {
-      this.drawSolidFace(face, state === 'idle' ? neutral.primary : neutral.primaryHover);
+      this.drawSolidFace(face, state === 'idle' ? sera.primary : sera.primaryHover);
     }
     this.label.setY(offset);
   }
@@ -104,6 +104,6 @@ export class SeraButton extends Phaser.GameObjects.Container {
   private drawOutlineFace(face: Phaser.Geom.Rectangle, fill: number): void {
     const inner = Phaser.Geom.Rectangle.Clone(face);
     Phaser.Geom.Rectangle.Inflate(inner, -OUTLINE_BORDER, -OUTLINE_BORDER);
-    this.face.fillStyle(neutral.primary, 1).fillRectShape(face).fillStyle(fill, 1).fillRectShape(inner);
+    this.face.fillStyle(sera.primary, 1).fillRectShape(face).fillStyle(fill, 1).fillRectShape(inner);
   }
 }

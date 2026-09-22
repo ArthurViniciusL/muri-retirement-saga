@@ -1,13 +1,13 @@
 import Phaser from 'phaser';
 import { gsap } from 'gsap';
-import { neutral, zinc } from '@/config/palette';
+import { palette, sera } from '@/config/palette';
 import { Motion } from '@/ui/Motion';
 import { PixelFont } from '@/ui/PixelFont';
 import { Woodcut } from '@/ui/Woodcut';
 
 const HEIGHT = 56;
 const PADDING_X = 24;
-// Sonner no Sera: borda neutral-900 em vez do token `border`, que some sobre o papel, e
+// Sonner no Sera: borda em tinta (`sera.primary`) em vez do token `border`, que some sobre o papel, e
 // sombra hachurada no lugar do `shadow-lg`, porque o jogo não tem desfoque.
 const BORDER = 2;
 const LABEL_SCALE = 3;
@@ -27,7 +27,7 @@ export class SeraToast extends Phaser.GameObjects.Container {
     super(scene, 0, 0);
     this.face = scene.make.graphics({}, false);
     this.label = scene.make
-      .bitmapText({ font: PixelFont.keyFor(900), text: '', size: PixelFont.sizeFor(LABEL_SCALE) }, false)
+      .bitmapText({ font: PixelFont.keyFor('ink'), text: '', size: PixelFont.sizeFor(LABEL_SCALE) }, false)
       .setOrigin(0.5);
     this.add([this.face, this.label]);
     this.setVisible(false);
@@ -75,12 +75,12 @@ export class SeraToast extends Phaser.GameObjects.Container {
       area: { x: left + SHADOW.offset, y: top + SHADOW.offset, width: faceWidth, height: HEIGHT },
       spacing: SHADOW.spacing,
       thickness: SHADOW.thickness,
-      color: zinc[500],
+      color: palette.sertao,
     });
     this.face
-      .fillStyle(neutral.primary, 1)
+      .fillStyle(sera.primary, 1)
       .fillRect(left, top, faceWidth, HEIGHT)
-      .fillStyle(zinc[50], 1)
+      .fillStyle(palette.bone, 1)
       .fillRect(left + BORDER, top + BORDER, faceWidth - BORDER * 2, HEIGHT - BORDER * 2);
   }
 }

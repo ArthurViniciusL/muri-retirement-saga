@@ -32,9 +32,9 @@ from pixelpng import Canvas, save_frames  # noqa: E402
 
 SIZE = 64
 
-OUTLINE = "zinc-950"  # carve and hatching
-BODY = "zinc-800"     # the bolt itself
-CORE = "zinc-300"     # the charged centre, the only light accent
+OUTLINE = "ink"  # carve and hatching
+BODY = "umber"     # the bolt itself
+CORE = "dust"     # the charged centre, the only light accent
 
 ANGLE = -75.0         # degrees; the long axis lies along the travel direction, tip right
 LENGTH, WIDTH = 47.0, 19.0

@@ -97,7 +97,7 @@ as a seam when tiles repeat. The carve lives inside the tile: the top tile gets 
 heavy edge on the top row, the left and right corner tiles on their outer column. Check
 a tile by repeating it three times side by side and confirming the seam disappears.
 
-Tiles are foreground and playable, so they sit in zinc-700..zinc-950.
+Tiles are foreground and playable, so they sit in `sertao`..`ink`.
 
 ## Parallax layers
 
@@ -106,15 +106,15 @@ is what tells the player which pixels are ground:
 
 | Layer | Scroll factor | Tones |
 | --- | --- | --- |
-| Far background | 0.25 | zinc-100 – zinc-300 |
-| Middle | 0.5 | zinc-400 – zinc-600 |
-| Foreground / playable | 1.0 | zinc-700 – zinc-950 (this is the tilemap, not a background image) |
+| Far background | 0.25 | `bone` – `dust` |
+| Middle | 0.5 | `dust` – `clay` |
+| Foreground / playable | 1.0 | `sertao` – `ink` (this is the tilemap, not a background image) |
 
 Background images are sized in multiples of 64. The logical viewport is 576 px tall
 (9 × 64), so a full-screen layer of 1024×576 or 1440×576 tiles cleanly.
 
 Iconography stays within the shared repertoire: mandacaru, cacti, stylised sun, cracked
-earth, stylised flora, musical instruments — adapted to the monochrome carve.
+earth, stylised flora, musical instruments — in the Cordel Arcade carve (`guidelines.md` §14).
 
 ## Puzzle cards
 

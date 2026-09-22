@@ -1,7 +1,7 @@
 ---
 title: Three Parallax Layers, Depth by Tone
 impact: MEDIUM
-impactDescription: creates depth without colour and keeps the ground unambiguous
+impactDescription: creates depth by tone and keeps the ground unambiguous
 tags: ui, parallax, art
 ---
 
@@ -13,9 +13,9 @@ axes.
 
 | Layer | Scroll factor | Tones | Content |
 | --- | --- | --- | --- |
-| Far background | 0.25 | zinc-100 – zinc-300 | low-contrast silhouettes: stylised sun, hills |
-| Middle | 0.5 | zinc-400 – zinc-600 | mid-distance scenery |
-| Foreground / playable | 1.0 | zinc-700 – zinc-950 | platforms and everything the player touches |
+| Far background | 0.25 | `bone` – `dust` | low-contrast silhouettes: stylised sun, hills, mandacaru |
+| Middle | 0.5 | `dust` – `clay` | mid-distance scenery |
+| Foreground / playable | 1.0 | `sertao` – `ink` | platforms and everything the player touches |
 
 The tonal split is not decorative: it is the guarantee from
 `art-contrast-readability.md` that ground is never mistaken for background decoration.

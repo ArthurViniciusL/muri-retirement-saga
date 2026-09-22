@@ -23,7 +23,7 @@ import zlib
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from pixelpng import RGB_TO_ZINC, tone_step  # noqa: E402
+from pixelpng import RGB_TO_TONE, darkness  # noqa: E402
 
 # role -> (expected size or None for "any multiple of 64", outline required)
 ROLES: dict[str, tuple[tuple[int, int] | None, bool]] = {
@@ -129,7 +129,7 @@ def check(path: Path, role: str) -> tuple[list[str], list[str]]:
             f"size {width}x{height}, expected {expected_size[0]}x{expected_size[1]} for role '{role}'"
         )
 
-    # 2. Palette and alpha — `art-palette-zinc.md`, `art-linework-and-texture.md`.
+    # 2. Palette and alpha — `art-palette-cordel.md`, `art-linework-and-texture.md`.
     tones: dict[str, int] = {}
     foreign: set[str] = set()
     partial_alpha = 0
@@ -140,14 +140,14 @@ def check(path: Path, role: str) -> tuple[list[str], list[str]]:
             if a != 255:
                 partial_alpha += 1
                 continue
-            name = RGB_TO_ZINC.get((r, g, b))
+            name = RGB_TO_TONE.get((r, g, b))
             if name is None:
                 foreign.add(f"#{r:02X}{g:02X}{b:02X}")
             else:
                 tones[name] = tones.get(name, 0) + 1
     if foreign:
         failures.append(
-            "colours outside the zinc scale: " + ", ".join(sorted(foreign)[:8])
+            "colours outside the palette: " + ", ".join(sorted(foreign)[:8])
         )
     if partial_alpha:
         failures.append(
@@ -158,24 +158,24 @@ def check(path: Path, role: str) -> tuple[list[str], list[str]]:
         failures.append("image is fully transparent")
     if len(tones) > MAX_TONES:
         failures.append(
-            f"{len(tones)} zinc tones ({', '.join(sorted(tones, key=tone_step))}); "
+            f"{len(tones)} tones ({', '.join(sorted(tones, key=darkness))}); "
             f"at most {MAX_TONES} per sprite — more reads as a gradient"
         )
 
     # 3. Tone range — `art-contrast-readability.md`.
     if tones:
-        darkest = max(tones, key=tone_step)
-        lightest = min(tones, key=tone_step)
+        darkest = max(tones, key=darkness)
+        lightest = min(tones, key=darkness)
         if role == "background":
-            if tone_step(darkest) > 500:
+            if darkness(darkest) > darkness("clay"):
                 failures.append(
-                    f"decorative asset uses {darkest}; background stays within zinc-50..zinc-500 "
+                    f"decorative asset uses {darkest}; background stays within bone..clay "
                     "so it never competes with playable elements"
                 )
-        elif tone_step(darkest) < 700:
+        elif darkness(darkest) < darkness("umber"):
             failures.append(
                 f"darkest tone is {darkest}; anything the player collides with or reads as "
-                "interactive needs a tone in zinc-700..zinc-950"
+                "interactive needs umber or ink"
             )
         if len(tones) == 1:
             warnings.append(f"single tone ({lightest}) — no carve, no shading, verify this is intended")
@@ -197,7 +197,7 @@ def check(path: Path, role: str) -> tuple[list[str], list[str]]:
                     if all(n == 255 for n in neighbours):
                         continue
                     border += 1
-                    if RGB_TO_ZINC.get((r, g, b)) == darkest:
+                    if RGB_TO_TONE.get((r, g, b)) == darkest:
                         outlined += 1
             coverage = outlined / border if border else 0.0
             if coverage < 0.95:

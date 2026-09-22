@@ -11,13 +11,14 @@ These are known gaps, not oversights. An agent that hits one of them must ask or
 the configured placeholder — never invent an answer and never treat its own choice as
 settled.
 
-### 1. Shared design system versus the zinc palette
+### 1. Palette values and pixel gouge marks
 
-`guidelines.md` §1 flags that the game's monochrome zinc palette diverges from the
-three-colour Cordel Arcade palette used by the party invitation. Inside this repository
-the zinc palette applies without exception, per `art-palette-zinc.md`. Whether the
-shared design system document should adopt the divergence is a decision that lives
-outside this codebase and does not block any work here.
+The game follows the invitation's Cordel Arcade palette (`art-palette-cordel.md`). The
+invitation still marks its three hex values as pending revalidation by the designer, and
+the three mixed tones (`dust`, `clay`, `umber`) and the pixel sizes of gouge marks and
+hatching (`guidelines.md` §15, §16) are a baseline translated from the vector guide.
+Use them as written; a revalidated value is a one-line change in `palette.ts` and
+`pixelpng.py`.
 
 ### 2. Gameplay tuning
 
