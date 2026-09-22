@@ -31,7 +31,7 @@ memory puzzle, and camera behaviour.
 ## 4. Art (art)
 
 **Impact:** HIGH
-**Description:** The pseudo pixel art contract, the zinc palette, linework,
+**Description:** The pseudo pixel art contract, the Cordel Arcade palette, linework,
 the locked 64 px grid, contrast rules, and asset naming.
 
 ## 5. UI (ui)

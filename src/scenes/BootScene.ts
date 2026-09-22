@@ -16,7 +16,7 @@ export class BootScene extends Phaser.Scene {
   }
 
   public create(): void {
-    PixelFont.register(this, [50, 900]);
+    PixelFont.register(this, ['bone', 'ink']);
     this.scene.start('PreloadScene');
   }
 }

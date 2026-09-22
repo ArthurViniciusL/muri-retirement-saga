@@ -1,141 +1,262 @@
-# Guia de Estilo Visual — Jogo "A Aposentadoria de Muri"
+# Visual Style Guide — "A Aposentadoria de Muri"
 
-## 1. Escopo deste documento
+The single visual source for the game. It merges the game's original style guide
+(sections 1–11, same numbering as before) with the "Cordel Arcade" design system of the
+party invitation (sections 12–17). Where a locked rule in `.agents/rules/` says
+otherwise, the rule wins.
 
-Este guia cobre **exclusivamente os elementos visuais do jogo** (personagens, cenário, UI, puzzle). Ele diverge deliberadamente da paleta tricolor do design system compartilhado "Cordel Arcade" (Preto Entalhe + Branco Osso + Marrom Sertão), que segue valendo para o convite. O jogo passa a usar uma **paleta estritamente monocromática**, baseada na escala `zinc` do shadcn/Tailwind — sem o marrom complementar. Essa restrição, na prática, aproxima o jogo ainda mais da referência de xilogravura tradicional, que historicamente é impressa em alto contraste preto sobre claro.
+## 1. Scope
 
-> ⚠️ Ponto a registrar: como isso muda a paleta combinada nos dois documentos anteriores do projeto, vale alinhar com o design system compartilhado se essa divergência é só para o jogo (como especificado aqui) ou se deve refletir de volta no documento de design system geral.
+This guide covers every visual element of the game: characters, scenery, UI, HUD and the
+puzzle. The game shares the invitation's **Cordel Arcade** identity — the same three
+colours, the same carved stroke — translated to pseudo pixel art on a 64 px grid. The
+earlier zinc monochrome palette is retired.
 
-## 2. Paleta de cores — escala `zinc`
+## 2. Colour palette
 
-| Tom | Hex | Uso recomendado |
+Three colours come from the invitation; three more are mixes between them, so the set
+never gains a new hue. Code names are English; the designer's Portuguese names are
+proper nouns.
+
+| Token | Name | Hex | Origin | Use |
+| --- | --- | --- | --- | --- |
+| `bone` | Branco Osso | `#F4EEDD` | invitation | paper, lightest background, text on dark surfaces, gouge marks |
+| `dust` | — | `#D2C3AF` | 75% bone + 25% sertão | far parallax, secondary background, muted UI surfaces |
+| `clay` | — | `#B09882` | 50% bone + 50% sertão | middle parallax, background scenery |
+| `sertao` | Marrom Sertão | `#6B4226` | invitation | subtle detail, hatching, secondary type, button hover, playable fills |
+| `umber` | — | `#442B1B` | 50% sertão + 50% ink | shadow on playable elements, internal detail |
+| `ink` | Preto Entalhe | `#1C1410` | invitation | outline, carved masses, display text |
+
+The six values live in `src/config/palette.ts` (and, for the art pipeline, in
+`.agents/skills/design-asset/scripts/pixelpng.py`). Nothing else repeats a literal hex.
+
+**General rule:** a single sprite uses at most **three or four tones** at once — for
+example `ink` outline, `umber` shadow, `sertao` body, `bone` highlight. The whole ramp in
+one element reads as a soft gradient, which is forbidden (§3).
+
+## 3. Stroke and texture
+
+- **Thick, slightly irregular lines** — never a perfectly smooth edge, even at 64 px.
+- **Shadow is always hatching** — parallel or crossed lines, or pixel dithering between
+  two palette tones. Never a gradient, never a drop shadow.
+- **No glow, shine or transparency.** A collectible that must stand out blinks by
+  swapping tones (for example `ink` and `clay` on two frames), never by opacity or light.
+- **Outline is mandatory on every playable sprite**: 1 px of `ink`, or the darkest tone
+  in the sprite, all the way around, so it reads against any background.
+- **Silhouette first.** Muri, a bat and a thief must be told apart as shapes before any
+  internal detail exists.
+- **Gouge marks** carve light into dark masses (§15). They are the main texture of the
+  style; black hatching is reserved for shadow falling on bare paper.
+
+## 4. Grid and scale
+
+The grid is locked at **64 px** (`art-grid-and-scale.md`). Every entity, tile and UI
+element is authored on it or on a multiple of it; UI icons use 32. Mixing scales breaks
+the proportion between Muri, enemies and scenery. Tiles follow the same grid so the
+tilemap assembles without resampling.
+
+## 5. Characters and required variations
+
+### Muri (playable)
+
+| Action | Frames | Note |
 | --- | --- | --- |
-| zinc-50 | `#FAFAFA` | Fundo mais claro / "papel" |
-| zinc-100 | `#F4F4F5` | Fundo secundário, áreas de respiro |
-| zinc-200 | `#E4E4E7` | Camadas de fundo distante (parallax) |
-| zinc-300 | `#D4D4D8` | Camadas de fundo intermediário |
-| zinc-400 | `#A1A1AA` | Elementos de cenário em segundo plano |
-| zinc-500 | `#71717A` | Tom médio — sombreamento intermediário via hachura |
-| zinc-600 | `#52525B` | Contornos suaves, detalhes internos de sprite |
-| zinc-700 | `#3F3F46` | Silhuetas de elementos de primeiro plano |
-| zinc-800 | `#27272A` | Contornos principais de personagens/inimigos |
-| zinc-900 | `#18181B` | Traço/contorno de destaque, texto sobre fundo claro |
-| zinc-950 | `#09090B` | Preto de maior contraste — usar com moderação, só onde o traço xilogravura pede o "entalhe" mais profundo |
+| Idle | 2–4 | subtle breathing or sway |
+| Walk | 4–6 | walk cycle |
+| Jump | 3 | rise / apex / fall |
+| Crouch | 1–2 | static pose plus transition |
+| Melee attack | 2–3 | wind-up plus strike |
+| Ranged attack | 2–3 | wind-up plus throw; the projectile is a separate sprite |
+| Defend | 1–2 | guard pose, held while the button is held |
+| Hurt | 1 | quick reaction frame; there is no knockback |
 
-**Regra geral**: cada sprite (personagem, inimigo, elemento de cenário) deve se apoiar em no máximo 3–4 tons da escala por vez (ex.: `zinc-950` para contorno, `zinc-700` para sombra, `zinc-100` para luz, `zinc-50` para fundo do próprio sprite) — usar a escala inteira de uma vez em um único elemento quebra a leitura "entalhada" e aproxima de um efeito de gradiente suave, que é proibido (ver §3).
+Drawn **facing right** and mirrored in code. Muri's frames are drawn by the project
+owner; missing poses use an existing frame as a stand-in, never a kit-bashed one.
 
-## 3. Princípios de traço e textura
+### Enemies (bat, wild cat, fireball)
 
-Herdados do design system compartilhado, mas ainda mais centrais agora que não há cor para carregar a informação visual:
-
-- **Linhas grossas e levemente irregulares** — nunca vetores perfeitamente lisos, mesmo em baixa resolução.
-- **Sombra sempre por hachura** (linhas paralelas/cruzadas ou dithering pixel a pixel) — nunca gradiente suave ou drop shadow. Em pixel art, isso se traduz em usar *dithering* (alternância de pixels entre dois tons de zinc) para simular meio-tom, no lugar de qualquer interpolação de cor.
-- **Sem glow, brilho ou transparência** — qualquer destaque visual (ex.: item coletável piscando) deve ser feito por variação de tom (zinc claro vs. escuro), nunca por opacidade ou efeito de luz.
-- **Contorno é obrigatório em todo sprite jogável** — um contorno de 1px em `zinc-950` (ou o tom mais escuro disponível no sprite) em volta de personagens, inimigos e itens, garantindo leitura contra qualquer fundo.
-- **Silhueta em primeiro lugar**: como não há cor para diferenciar Muri de um morcego ou de uma ladra à distância, cada entidade precisa ser reconhecível só pela silhueta, antes de qualquer detalhe interno.
-
-## 4. Grid e escala dos sprites
-
-- Base definida: **pixel art em baixa resolução clássica**, na faixa de **32×32 a 64×64 px** por sprite de personagem/inimigo.
-- **Antes de iniciar a produção de assets, é preciso travar um valor único** (32×32 *ou* 64×64) para todos os sprites de entidade — misturar as duas escalas no mesmo jogo quebra a proporção entre Muri, inimigos e cenário.
-- Tiles de cenário devem seguir o mesmo grid escolhido para o personagem, para que o tilemap se encaixe sem reamostragem.
-- Elementos de UI (corações, ícones de item, cartas do puzzle) podem ter escala própria, mas sempre múltipla do grid base (ex.: se o grid é 32px, ícones de UI em 16px ou 32px — nunca em valores quebrados como 20px ou 48px).
-
-## 5. Personagens — diretrizes e variações necessárias
-
-### Muri (jogável)
-| Ação | Frames sugeridos | Observação |
+| Action | Frames | Note |
 | --- | --- | --- |
-| Idle | 2–4 | Respiração/balanço sutil |
-| Andar | 4–6 | Ciclo de caminhada |
-| Pular | 3 | Subida / ápice / descida |
-| Agachar | 1–2 | Pose estática + transição |
-| Ataque corpo a corpo | 2–3 | Preparação + golpe |
-| Ataque à distância | 2–3 | Preparação + arremesso (projétil é sprite separado) |
-| Defender | 1–2 | Pose de guarda (sustentável enquanto o botão é segurado) |
-| Dano (Hurt) | 1 | Frame de reação rápida — sem knockback, então é só feedback visual |
+| Movement (fly / run / trajectory) | 2–4 | continuous loop |
+| Defeat (one hit) | 2–3 | the woodcut bursting into fragments |
 
-Direção: produzir **virado para a direita** e espelhar via código para a esquerda (convenção padrão, evita duplicar arte).
+Each enemy's silhouette must be distinct from the other two: they all deal the same
+damage, and the shape tells the player the movement pattern (flies / runs on the ground /
+crosses the middle).
 
-### Inimigos (morcego, gato selvagem, bola de fogo)
-| Ação | Frames sugeridos | Observação |
-| --- | --- | --- |
-| Movimento (voo/corrida/trajetória) | 2–4 | Loop contínuo |
-| Derrota (1 hit) | 2–3 | Sprite de "quebra"/desaparecimento — reforça o traço xilogravura estourando em fragmentos, por exemplo |
+### Thieves (Maryana, Mayra, Weruska)
 
-Cada inimigo precisa de silhueta clara e distinta dos outros dois, já que todos causam o mesmo tipo de dano (1 coração) — a diferenciação visual ajuda o jogador a antecipar o padrão de movimento (voa / corre no chão / passa pelo meio).
+- One standing pose and one approach pose (the moment of the theft).
+- Distinct silhouettes, recognisable from afar so the player can decide to dodge.
+- No complex walk cycle: they are contact events.
+- One reusable dialogue bubble frame, shared by all three.
 
-### As ladras (Maryana, Mayra, Weruska)
-- Sprite parado + 1 pose de "abordagem" (momento do roubo).
-- Silhuetas distintas entre as três, para o jogador reconhecer de longe qual delas está se aproximando (e decidir se desvia).
-- Não precisam de ciclo de andar complexo — são eventos de contato, não perseguem o jogador ativamente (a menos que a IA definida em produção diga o contrário).
-- Cada uma acompanha uma **moldura de balão de diálogo** reutilizável (mesma moldura para as três, só o texto muda).
+## 6. Scenery and tilemap
 
-## 6. Cenário / tilemap
+- A modular tileset per phase theme (instruments / video games / coins), always inside
+  the palette.
+- Minimum tiles per platform: **top, middle, left corner, right corner**.
+- **At least three parallax layers**, with tone as the depth cue:
+  - Far background: `bone`–`dust`, low contrast, simple silhouettes (stylised sun,
+    hills, mandacaru).
+  - Middle: `dust`–`clay`.
+  - Foreground and playable platforms: `sertao`–`ink`, high contrast, so ground is never
+    mistaken for decoration.
+- The Cordel Arcade repertoire (§14) is the scenery vocabulary.
+- Trigger points (puzzle altar or stall, ammo pickups, coins) read clearly by outline and
+  high-contrast tone, never by a tint alone.
 
-- Tileset modular por fase, seguindo o tema de cada uma (instrumentos / vídeo games / moedas), mas sempre dentro da paleta zinc.
-- Variações mínimas por tile de plataforma: **tile de topo, tile de repetição (meio), tile de canto esquerdo, tile de canto direito** — permite montar plataformas de qualquer comprimento sem esticar a arte.
-- **Parallax em pelo menos 3 camadas de profundidade**, usando tom como recurso de profundidade (já que não há cor):
-  - Fundo distante: tons claros (`zinc-100`–`zinc-300`), baixo contraste, silhuetas simples (ex.: sol estilizado, montanhas).
-  - Camada intermediária: tons médios (`zinc-400`–`zinc-600`).
-  - Primeiro plano/plataformas jogáveis: tons escuros e alto contraste (`zinc-700`–`zinc-950`), para garantir que o que é "chão" nunca seja confundido com decoração de fundo.
-- Repertório iconográfico do design system compartilhado (mandacaru, cactos, sol estilizado, terra rachada, flora estilizada, instrumentos musicais) continua válido como elementos de cenário — adaptado ao traço monocromático.
-- Pontos de trigger (altar/barraca do puzzle, pickups de munição, moedas) precisam de leitura clara mesmo em tons de cinza — usar contorno + tom de maior contraste, nunca depender de cor para indicar "isso é interativo".
+## 7. UI and HUD
 
-## 7. UI / HUD
-
-| Elemento | Variações necessárias |
+| Element | Required variations |
 | --- | --- |
-| Corações (vida) | Cheio / vazio (mínimo 2 estados); opcional: 1 frame de "quebra" na transição |
-| Moedas comuns (contador) | Ícone único, sem variação de estado |
-| Munição (ataque à distância) | Ícone cheio / vazio, repetido conforme munição atual |
-| Itens essenciais (instrumento, CDs, cofre) | Versão silhueta (não coletado) / versão preenchida (coletado) |
-| Botões de controle virtual (D-pad, pular, atacar, atacar à distância, defender) | Estado normal / estado pressionado (2 estados cada) |
-| Balão de diálogo das ladras | Moldura única reutilizável + área de texto |
+| Hearts (health) | full / empty; optional one "breaking" frame |
+| Common coins (counter) | single icon |
+| Ammo | full / empty icon, repeated per current ammo |
+| Essential items (instrument, CDs, safe) | silhouette (not collected) / filled (collected) |
+| Virtual control buttons | normal / pressed |
+| Thieves' dialogue bubble | one reusable frame plus text area |
 
-Todo elemento de HUD deve ter contorno próprio e não pode depender de sobreposição de opacidade para se destacar do cenário atrás dele — HUD sempre em camada separada, renderizada por cima da cena de jogo.
+Every HUD element has its own outline and never relies on opacity to stand out; the HUD
+renders on its own layer above the game. Components modelled on shadcn/ui follow the Sera
+style (`ui-*` rules) with the palette tokens: `ink` as primary, `sertao` as hover, `dust`
+as muted surface.
 
-## 8. Puzzle — cartas do jogo da memória
+## 8. Puzzle cards
 
-- Grid de 25 cartas (5×5), cada carta com:
-  - **Verso** (fechado): padrão único, igual para todas as cartas da fase.
-  - **Frente** (revelado): ilustração temática (instrumentos / games / moedas conforme a fase).
-- Ilustrações das cartas seguem a mesma paleta zinc e princípios de traço do restante do jogo (hachura, contorno, sem gradiente) — mesmo sendo um elemento de UI, deve parecer parte do mesmo mundo visual, não um estilo à parte.
-- Tamanho de carta: múltiplo do grid base (§4), grande o suficiente para leitura em tela de celular (sugestão mínima: 48×48px de área útil por carta, ajustável conforme teste de usabilidade).
+- 25 cards (5×5), each with a **back** (one pattern per phase) and a **front** (a themed
+  illustration: instruments / games / coins).
+- Cards use the same palette and stroke as the rest of the game: they belong to the same
+  world, not to a separate UI style.
+- Cards are authored at 64 and displayed at 96 (`gameplay-puzzle.md`).
 
-## 9. Contraste e legibilidade (regra crítica em paleta monocromática)
+## 9. Contrast and readability
 
-Sem cor para diferenciar categorias de elementos (jogável vs. decorativo, ameaça vs. seguro), o contraste de tom é a **única ferramenta de comunicação visual** disponível. Regras obrigatórias:
+Tone contrast is what separates what the player interacts with from decoration.
 
-1. Elementos com os quais o jogador colide (plataformas, inimigos, ladras, hazards) sempre nos tons mais escuros e de maior contraste da paleta (`zinc-700` a `zinc-950`).
-2. Elementos puramente decorativos (fundo, parallax) sempre em tons médios a claros (`zinc-50` a `zinc-500`), nunca competindo em contraste com o que é jogável.
-3. Nunca posicionar dois elementos de tons adjacentes (ex.: `zinc-800` sobre `zinc-900`) sem um contorno separando — o efeito de "esconder" contra o fundo pode ser intencional para elementos decorativos, mas nunca para nada com o qual o jogador precise interagir ou desviar.
+1. Everything the player collides with — platforms, enemies, thieves, hazards — uses the
+   dark end of the palette: **`sertao`, `umber`, `ink`**, with an `ink` outline.
+2. Purely decorative elements — backgrounds, parallax — stay in **`bone`, `dust`,
+   `clay`** and never compete with playable elements.
+3. Two adjacent tones never touch without an outline between them. Hiding decoration
+   against the background can be intentional; hiding anything the player must reach or
+   dodge never is.
 
-## 10. Convenção de nomenclatura de arquivos (sugestão)
+## 10. File naming
 
 ```
-<entidade>_<ação>_<frame>.png
+<entity>_<action>_<frame>.png
 muri_idle_01.png
-muri_walk_03.png
 bat_fly_02.png
 maryana_idle.png
 puzzle_card_instrumento_violao.png
 ui_heart_full.png
-ui_heart_empty.png
 ```
 
-Facilita a integração no Phaser (sprite atlas) e a organização em `src/assets/sprites/` conforme a estrutura de pastas do System Design.
+Lower case, frame padded to two digits, under `src/assets/sprites/`
+(`art-asset-naming.md`).
 
-## 11. Checklist resumido — variações mínimas por tipo de sprite
+## 11. Minimum variation checklist
 
-| Tipo de sprite | Variações mínimas |
+| Sprite type | Minimum variations |
 | --- | --- |
-| Muri (jogável) | 9 conjuntos de animação (idle, andar, pular, agachar, ataque corpo a corpo, ataque à distância, defender, dano) × 1–6 frames cada, direção única (espelhada por código) |
-| Inimigo (cada tipo) | 1 animação de movimento (loop) + 1 animação de derrota |
-| Ladra (cada uma) | 1 pose parada + 1 pose de abordagem + moldura de diálogo compartilhada |
-| Tile de plataforma (por tema de fase) | Topo, meio, canto esquerdo, canto direito |
-| Camada de parallax | Mínimo 3 camadas por fase (fundo distante, meio, primeiro plano) |
-| Carta de puzzle (por tema de fase) | Verso único + 1 frente por imagem temática (mínimo o suficiente para preencher 25 cartas = ao menos 12–13 imagens únicas em pares) |
-| Ícone de HUD (coração, munição) | Estado cheio + estado vazio |
-| Ícone de item essencial | Silhueta (não coletado) + preenchido (coletado) |
-| Botão de controle virtual | Normal + pressionado |
+| Muri | the eight animation sets of §5, one direction, mirrored in code |
+| Enemy (each) | one movement loop plus one defeat animation |
+| Thief (each) | standing pose, approach pose, shared dialogue frame |
+| Platform tile (per theme) | top, middle, left corner, right corner |
+| Parallax | at least three layers per phase |
+| Puzzle card (per theme) | one back plus enough fronts for 25 cards (12–13 unique images) |
+| HUD icon (heart, ammo) | full plus empty |
+| Essential item icon | silhouette plus filled |
+| Virtual control button | normal plus pressed |
+
+---
+
+## 12. Visual concept — Cordel Arcade
+
+Traditional Northeastern Brazilian woodcut (carved stroke, grainy texture, hatching for
+shadow) fused with the retro look of early video games, Atari as the reference: geometric,
+blocky silhouettes, without vibrant video-game colours. Tone: warm and festive, yet sober,
+never childish.
+
+Typography in the invitation is **Xilosa** for headings and **Caveat** for body copy.
+In the game, text is drawn with the in-code pixel font (`src/ui/PixelFont.ts`), the
+"Atari" half of Cordel Arcade, because high-resolution text over 64 px art mixes
+resolutions (`art-pseudo-pixel-art.md`). A lookalike of Xilosa is never substituted.
+
+## 13. Carved shapes
+
+The invitation carves frames with asymmetric corners and bellied sides, imitating a
+gouge:
+
+```css
+border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+```
+
+In the game the same idea is geometry: `Woodcut.carvedRect` bends long edges into a
+slight off-centre belly and lets two or three corners overshoot. Vary it between
+neighbouring elements so no two share a silhouette. Sera-style buttons and toasts keep
+their square corners (`ui-*` rules); carved shapes are for plates, frames and scenery.
+
+## 14. Iconographic repertoire
+
+- Sertão: mandacaru, cacti, stylised sun, cracked earth.
+- Stylised flora.
+- Popular religious elements (ex-votos), sparingly.
+- Musical instruments: guitar, accordion, pandeiro, triangle, zabumba.
+- The name "Muricarliton" and the numeral "50" as a central typographic piece, in cordel
+  cover style.
+
+The invitation's vector pieces (`broom`, `cactus_*`, `sun`, `straw_hat`, `flag_001`,
+`arcodeon`) live in the sibling `digital-invite` project and are the reference for "the
+same hand". `cactus_004.svg` is the reference of record for gouge marks.
+
+## 15. Gouge marks
+
+Gouge marks are the light cuts a gouge leaves **inside** a filled dark mass. They are what
+separates a carved plate from a flat silhouette.
+
+**The mark.** A short leaf, not a line and not a wedge: pointed at both ends, swelling in
+the middle, bowed slightly in one direction. It holds at least four fifths of its width
+across its middle 60% and closes fast at both ends. Width does not scale with length. A
+mark never spans its mass: it covers well under a tenth of the length it sits on.
+
+**The field.** Marks are scattered, not a pattern. Density varies by region — the main
+mass carries about three times the marks of a secondary one — and a narrow mass gets
+fewer marks, never zero. Orientation follows the local long axis of the mass, but about
+one mark in six lies more than 45° off it; those cross-lying marks stop the set from
+reading as scales or seeds.
+
+**The ink budget.** Under 10% of the mass area is cut away. A piece that reads as a
+lighter tone instead of dark has too much removed; the fix is fewer or shorter marks,
+never thinner ones.
+
+**At 64 px.** A mark is at least 1 px wide and 2 px long, in `bone` (or the lightest tone
+of the sprite) inside an `ink` or `umber` mass. A 64 px sprite carries roughly 3 to 8
+marks; a 32 px icon carries at most 2 to 3, or none — below that size the solid
+silhouette with its outline wins. UI plates drawn in code use `Woodcut.gougeMarks`, which
+implements these proportions.
+
+## 16. Hatching
+
+Hatching describes shadow falling on bare paper. It uses a single angle across every
+asset — **45°**, with 45° and 135° for crossed hatching — so the set reads as one system.
+In pixel art, hatching is one-pixel diagonal lines or a dither; spacing is at least 2 px,
+because tighter hatching turns into a flat mid tone, which is the gradient the style
+forbids. Hatching never appears inside a filled mass: that is the job of gouge marks.
+
+## 17. Controlled irregularity
+
+The goal is hand-carved wood, not noise:
+
+- Offset a few points of a long edge by one pixel so it is not ruler-straight; do not
+  jitter every edge.
+- Let two or three corners of a piece overshoot, never all of them.
+- Give long straight edges a slight belly with its apex off centre.
+- Symmetric subjects (a sun, a pandeiro) are drawn with both sides slightly different,
+  not mirrored.
+
+A piece where every point was moved looks shaky. Choose the places.
+
+**Forbidden everywhere**: gradients, glow, blur or drop shadow filters, partial opacity,
+and any colour outside §2.

@@ -14,7 +14,8 @@ it up where it only costs screen space — in the final upscale.
 **Strict at authoring time:**
 
 - Every sprite and tile is drawn on the locked 64 px grid.
-- Zinc palette only, at most three or four tones per sprite.
+- Cordel Arcade palette only (`art-palette-cordel.md`), at most three or four tones per
+  sprite.
 - Dithering for half-tones. No gradients, no glow, no transparency.
 
 **Tolerant at display time:**

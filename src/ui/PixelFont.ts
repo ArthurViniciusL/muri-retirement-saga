@@ -12,10 +12,10 @@
  * A fonte Xilosa do convite não foi entregue e não é substituída por uma parecida;
  * esta fonte é o bloco "Atari" do Cordel Arcade, não uma imitação da Xilosa.
  *
- * Referência: `.agents/rules/art-pseudo-pixel-art.md`; xilo-guidelines §4.1, §5.2.
+ * Referência: `.agents/rules/art-pseudo-pixel-art.md`; guidelines.md §12.
  */
 import Phaser from 'phaser';
-import { zincCss, type ZincTone } from '@/config/palette';
+import { paletteCss, type PaletteTone } from '@/config/palette';
 
 const ACCENT_ROWS = 2;
 const BODY_ROWS = 7;
@@ -290,7 +290,7 @@ function paintGlyphStrip(
 
 
 export class PixelFont {
-  public static keyFor(tone: ZincTone): string {
+  public static keyFor(tone: PaletteTone): string {
     return `pixel-${tone}`;
   }
 
@@ -313,7 +313,7 @@ export class PixelFont {
    * Gera uma textura e um registro de bitmap font por tom. Um registro por tom em
    * vez de `setTint`, porque o renderizador canvas ignora tint.
    */
-  public static register(scene: Phaser.Scene, tones: readonly ZincTone[]): void {
+  public static register(scene: Phaser.Scene, tones: readonly PaletteTone[]): void {
     const cells = buildCells();
     const textureWidth = [...cells.values()].reduce((sum, cell) => sum + cellWidth(cell) + 1, 0);
 
@@ -328,7 +328,7 @@ export class PixelFont {
         throw new Error(`PixelFont: não foi possível criar a textura "${key}".`);
       }
       const context = texture.getContext();
-      context.fillStyle = zincCss(tone);
+      context.fillStyle = paletteCss(tone);
       const chars = paintGlyphStrip(context, cells, textureWidth);
       texture.refresh();
 

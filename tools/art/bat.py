@@ -22,10 +22,10 @@ from pixelpng import Canvas, save_frames  # noqa: E402
 SIZE = 64
 MIRROR = 63  # body is symmetric about x = 31.5, so the left wing is 63 - x
 
-OUTLINE = "zinc-950"  # carve, arm bones, hatching
-BODY = "zinc-800"     # torso and head
-MEMBRANE = "zinc-700" # wing skin, one step lighter so the wings read as separate
-EYE = "zinc-300"      # the only light accent, so the head is found first
+OUTLINE = "ink"  # carve, arm bones, hatching
+BODY = "umber"     # torso and head
+MEMBRANE = "sertao" # wing skin, one step lighter so the wings read as separate
+EYE = "dust"      # the only light accent, so the head is found first
 
 
 # ----------------------------------------------------------------- geometry helpers
@@ -84,7 +84,7 @@ def wing_points(span: float, tip_y: float) -> tuple[list[tuple[float, float]], l
 def body() -> Canvas:
     """Torso, head and ears on their own canvas so the body can be carved separately.
 
-    The carve matters: membrane (zinc-700) and torso (zinc-800) are adjacent steps on
+    The carve matters: membrane (sertao) and torso (umber) are adjacent steps on
     the scale and may never touch without a line between them
     (`art-contrast-readability.md`). Outlining the body before stamping it on the wing
     is what puts that line there.

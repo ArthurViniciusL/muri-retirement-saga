@@ -28,9 +28,9 @@ from pixelpng import Canvas, save_frames  # noqa: E402
 SIZE = 64
 CX, CY = 40.0, 31.5  # the head sits well to the right; the tail needs the room behind it
 
-OUTLINE = "zinc-950"  # carve, radial tongues, hatching
-FLAME = "zinc-800"    # the body of the flame
-CORE = "zinc-300"     # the only light accent, so the hot centre is found first
+OUTLINE = "ink"  # carve, radial tongues, hatching
+FLAME = "umber"    # the body of the flame
+CORE = "dust"     # the only light accent, so the hot centre is found first
 
 HEAD = 12.5    # head radius; everything else is expressed as a multiple of it
 TRAIL = 1.05   # how far the tail stretches behind the head, as a multiple of HEAD

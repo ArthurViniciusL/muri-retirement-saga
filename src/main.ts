@@ -8,7 +8,7 @@
  */
 import Phaser from 'phaser';
 import { gameConfig, logicalWidthFor } from '@/config/gameConfig';
-import { zincCss } from '@/config/palette';
+import { paletteCss } from '@/config/palette';
 import { BootScene } from '@/scenes/BootScene';
 import { PreloadScene } from '@/scenes/PreloadScene';
 import { MenuScene } from '@/scenes/MenuScene';
@@ -25,7 +25,7 @@ const { render, physics } = gameConfig;
 const game = new Phaser.Game({
   type: Phaser.AUTO,
   parent: 'game-root',
-  backgroundColor: zincCss(50),
+  backgroundColor: paletteCss('bone'),
   pixelArt: render.pixelArt,
   roundPixels: render.roundPixels,
   antialias: render.antialias,

@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { gsap } from 'gsap';
-import { zinc } from '@/config/palette';
+import { palette } from '@/config/palette';
 import type { PhaseNumber, PhaseState } from '@/systems/PhaseProgress';
 import { Motion } from '@/ui/Motion';
 import { PixelFont } from '@/ui/PixelFont';
@@ -141,15 +141,15 @@ export class PhasePlate extends Phaser.GameObjects.Container {
     Woodcut.hatch(shadow, {
       area: { x: PLATE.x + SHADOW_OFFSET, y: PLATE.y + SHADOW_OFFSET, width: SIZE + 2, height: SIZE + 2 },
       ...HATCH,
-      color: zinc[500],
+      color: palette.sertao,
     });
 
     const mass = this.scene.make.graphics({}, false);
-    mass.fillStyle(zinc[950], 1).fillPoints(carver.carvedRect(PLATE, CARVE), true);
+    mass.fillStyle(palette.ink, 1).fillPoints(carver.carvedRect(PLATE, CARVE), true);
 
     const number = this.scene.make
       .bitmapText(
-        { font: PixelFont.keyFor(50), text: String(this.phase), size: PixelFont.sizeFor(NUMBER_SCALE) },
+        { font: PixelFont.keyFor('bone'), text: String(this.phase), size: PixelFont.sizeFor(NUMBER_SCALE) },
         false,
       )
       .setOrigin(0.5);
@@ -163,7 +163,7 @@ export class PhasePlate extends Phaser.GameObjects.Container {
 
   private carveGouges(carver: Woodcut, avoid: readonly Rect[]): Phaser.GameObjects.Graphics {
     const gouges = this.scene.make.graphics({}, false);
-    gouges.fillStyle(zinc[50], 1);
+    gouges.fillStyle(palette.bone, 1);
     carver.gougeMarks(PLATE, { ...GOUGES, avoid }).forEach((mark) => gouges.fillPoints(mark, true));
     return gouges;
   }
@@ -171,9 +171,9 @@ export class PhasePlate extends Phaser.GameObjects.Container {
   private drawCheck(carver: Woodcut): Phaser.GameObjects.Graphics {
     const check = this.scene.make.graphics({}, false);
     check
-      .fillStyle(zinc[50], 1)
+      .fillStyle(palette.bone, 1)
       .fillPoints(carver.carvedRect(NOTCH, { ...CARVE, belly: 1.5, step: 16, overshootCorners: 1, overshoot: 3 }), true)
-      .fillStyle(zinc[950], 1)
+      .fillStyle(palette.ink, 1)
       .fillPoints(
         CHECK_SHAPE.map((p) => ({ x: NOTCH.x + p.x, y: NOTCH.y + p.y })),
         true,
@@ -186,11 +186,11 @@ export class PhasePlate extends Phaser.GameObjects.Container {
 
     const face = this.scene.make.graphics({}, false);
     face
-      .fillStyle(zinc[950], 1)
+      .fillStyle(palette.ink, 1)
       .fillPoints(carver.carvedRect(PLATE, CARVE), true)
-      .fillStyle(zinc[50], 1)
+      .fillStyle(palette.bone, 1)
       .fillPoints(carver.carvedRect(inset(PLATE, LOCKED_BORDER), { ...CARVE, belly: 2 }), true);
-    Woodcut.hatch(face, { area: inset(PLATE, LOCKED_HATCH_INSET), ...HATCH, color: zinc[400] });
+    Woodcut.hatch(face, { area: inset(PLATE, LOCKED_HATCH_INSET), ...HATCH, color: palette.clay });
 
     const lock = this.drawLock();
     this.add([face, lock]);
@@ -214,14 +214,14 @@ export class PhasePlate extends Phaser.GameObjects.Container {
     const lock = this.scene.make.graphics({}, false);
     this.clearPaperAround(lock, [body, shackle]);
     this.drawShackle(lock, shackle);
-    lock.fillStyle(zinc[950], 1).fillRectShape(body);
+    lock.fillStyle(palette.ink, 1).fillRectShape(body);
     this.carveKeyhole(lock, body);
     return lock;
   }
 
   // Dois tons nunca se tocam sem contorno: a hachura não encosta no cadeado.
   private clearPaperAround(lock: Phaser.GameObjects.Graphics, parts: readonly Phaser.Geom.Rectangle[]): void {
-    lock.fillStyle(zinc[50], 1);
+    lock.fillStyle(palette.bone, 1);
     parts.forEach((part) => {
       const cleared = Phaser.Geom.Rectangle.Clone(part);
       Phaser.Geom.Rectangle.Inflate(cleared, LOCK.clearance, LOCK.clearance);
@@ -232,7 +232,7 @@ export class PhasePlate extends Phaser.GameObjects.Container {
   private drawShackle(lock: Phaser.GameObjects.Graphics, shackle: Phaser.Geom.Rectangle): void {
     const thickness = LOCK.shackleThickness;
     lock
-      .fillStyle(zinc[950], 1)
+      .fillStyle(palette.ink, 1)
       .fillRect(shackle.x, shackle.y, thickness, shackle.height)
       .fillRect(shackle.right - thickness, shackle.y, thickness, shackle.height)
       .fillRect(shackle.x, shackle.y, shackle.width, thickness);
@@ -242,7 +242,7 @@ export class PhasePlate extends Phaser.GameObjects.Container {
     const { keyholeRadius, keyholeSlot } = LOCK;
     const centerY = body.centerY - keyholeRadius / 2;
     lock
-      .fillStyle(zinc[50], 1)
+      .fillStyle(palette.bone, 1)
       .fillCircle(body.centerX, centerY, keyholeRadius)
       .fillRect(body.centerX - keyholeSlot.width / 2, centerY, keyholeSlot.width, keyholeSlot.height);
   }
@@ -252,7 +252,7 @@ export class PhasePlate extends Phaser.GameObjects.Container {
     const length = outer * 2;
     const frame = this.scene.make.graphics({}, false);
     frame
-      .fillStyle(zinc[900], 1)
+      .fillStyle(palette.ink, 1)
       .fillRect(-outer, -outer, length, FOCUS.thickness)
       .fillRect(-outer, outer - FOCUS.thickness, length, FOCUS.thickness)
       .fillRect(-outer, -outer, FOCUS.thickness, length)

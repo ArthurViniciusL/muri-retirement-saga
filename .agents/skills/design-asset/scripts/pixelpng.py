@@ -1,4 +1,4 @@
-"""Zinc-palette pixel canvas and dependency-free PNG writer.
+"""Cordel Arcade pixel canvas and dependency-free PNG writer.
 
 Why this exists: the project has no image library installed (no Pillow, no numpy) and
 pixel art for this game is small, indexed and highly constrained. Writing the PNG by
@@ -9,14 +9,14 @@ Authoring model: you describe the sprite as an ASCII grid plus a legend. That ke
 silhouette readable in the source file, which is the thing the style guide cares about
 most, and makes a later tweak a one-character edit instead of a coordinate hunt.
 
-    from pixelpng import Canvas, ZINC
+    from pixelpng import Canvas, PALETTE
 
     ROWS = [
         "..###..",
         ".#ooo#.",
         "#ooOoo#",
     ]
-    c = Canvas.from_ascii(ROWS, {"#": "zinc-950", "o": "zinc-100", "O": "zinc-700"})
+    c = Canvas.from_ascii(ROWS, {"#": "ink", "o": "bone", "O": "sertao"})
     c.save("src/assets/sprites/muri_idle_01.png")
 
 Alpha is strictly binary: a pixel is either fully opaque or fully transparent. The style
@@ -30,23 +30,18 @@ import struct
 import zlib
 from pathlib import Path
 
-# Zinc scale from `.agents/rules/art-palette-zinc.md`. No other colour may appear in a
-# game asset, so this table is the whole allowed vocabulary.
-ZINC: dict[str, tuple[int, int, int]] = {
-    "zinc-50": (0xFA, 0xFA, 0xFA),
-    "zinc-100": (0xF4, 0xF4, 0xF5),
-    "zinc-200": (0xE4, 0xE4, 0xE7),
-    "zinc-300": (0xD4, 0xD4, 0xD8),
-    "zinc-400": (0xA1, 0xA1, 0xAA),
-    "zinc-500": (0x71, 0x71, 0x7A),
-    "zinc-600": (0x52, 0x52, 0x5B),
-    "zinc-700": (0x3F, 0x3F, 0x46),
-    "zinc-800": (0x27, 0x27, 0x2A),
-    "zinc-900": (0x18, 0x18, 0x1B),
-    "zinc-950": (0x09, 0x09, 0x0B),
+# Cordel Arcade palette from `.agents/rules/art-palette-cordel.md`, lightest first. No
+# other colour may appear in a game asset, so this table is the whole allowed vocabulary.
+PALETTE: dict[str, tuple[int, int, int]] = {
+    "bone": (0xF4, 0xEE, 0xDD),
+    "dust": (0xD2, 0xC3, 0xAF),
+    "clay": (0xB0, 0x98, 0x82),
+    "sertao": (0x6B, 0x42, 0x26),
+    "umber": (0x44, 0x2B, 0x1B),
+    "ink": (0x1C, 0x14, 0x10),
 }
 
-RGB_TO_ZINC: dict[tuple[int, int, int], str] = {v: k for k, v in ZINC.items()}
+RGB_TO_TONE: dict[tuple[int, int, int], str] = {v: k for k, v in PALETTE.items()}
 
 TRANSPARENT = (0, 0, 0, 0)
 
@@ -55,21 +50,21 @@ def _rgba(tone: str | None) -> tuple[int, int, int, int]:
     if tone is None:
         return TRANSPARENT
     try:
-        r, g, b = ZINC[tone]
+        r, g, b = PALETTE[tone]
     except KeyError:
         raise ValueError(
-            f"{tone!r} is not on the zinc scale. Allowed: {', '.join(ZINC)}"
+            f"{tone!r} is not in the palette. Allowed: {', '.join(PALETTE)}"
         ) from None
     return (r, g, b, 255)
 
 
-def tone_step(tone: str) -> int:
-    """`zinc-700` -> 700. Used to compare darkness; higher is darker."""
-    return int(tone.split("-")[1])
+def darkness(tone: str) -> int:
+    """Position in the palette, lightest first: `bone` -> 0, `ink` -> 5."""
+    return list(PALETTE).index(tone)
 
 
 class Canvas:
-    """A fixed-size grid of binary-alpha zinc pixels."""
+    """A fixed-size grid of binary-alpha palette pixels."""
 
     def __init__(self, width: int, height: int) -> None:
         if width <= 0 or height <= 0:
@@ -86,7 +81,7 @@ class Canvas:
     def from_ascii(cls, rows: list[str], legend: dict[str, str | None]) -> "Canvas":
         """Build a canvas from an ASCII grid.
 
-        `legend` maps each character to a zinc tone name, or to None for transparent.
+        `legend` maps each character to a palette tone name, or to None for transparent.
         Every row must be the same length; a ragged grid is almost always a typo that
         would silently shift the silhouette, so it is rejected instead of padded.
         """
@@ -163,7 +158,7 @@ class Canvas:
     ) -> None:
         """Checkerboard two tones to fake a half-tone.
 
-        This is the only legal way to get a value between two zinc steps: the style guide
+        This is the only legal way to get a value between two palette tones: the style guide
         forbids gradients, so a mid tone is produced by alternating pixels instead of
         interpolating colour. `density=2` is the classic 50% checker; 3 and 4 give
         progressively sparser `tone_b`.
@@ -204,7 +199,7 @@ class Canvas:
                 if (xx + yy) % spacing == 0 or (cross and (xx - yy) % spacing == 0):
                     self.px(xx, yy, tone)
 
-    def outline(self, tone: str = "zinc-950") -> None:
+    def outline(self, tone: str = "ink") -> None:
         """Wrap the opaque silhouette in a 1 px outline, growing outwards.
 
         Mandatory on every playable sprite so it reads against any background. Because
@@ -267,14 +262,14 @@ class Canvas:
     # ------------------------------------------------------------------ inspection
 
     def tones(self) -> dict[str, int]:
-        """Zinc tone -> pixel count, for the opaque pixels only."""
+        """Palette tone -> pixel count, for the opaque pixels only."""
         counts: dict[str, int] = {}
         for row in self.pixels:
             for r, g, b, a in row:
                 if a == 0:
                     continue
-                name = RGB_TO_ZINC.get((r, g, b))
-                key = name or f"NON-ZINC #{r:02X}{g:02X}{b:02X}"
+                name = RGB_TO_TONE.get((r, g, b))
+                key = name or f"OFF-PALETTE #{r:02X}{g:02X}{b:02X}"
                 counts[key] = counts.get(key, 0) + 1
         return counts
 
@@ -289,9 +284,9 @@ class Canvas:
                 if a == 0:
                     line.append(" ")
                 else:
-                    name = RGB_TO_ZINC.get((r, g, b))
-                    step = tone_step(name) if name else 950
-                    idx = min(len(ramp) - 1, max(1, round(step / 950 * (len(ramp) - 1))))
+                    name = RGB_TO_TONE.get((r, g, b))
+                    step = darkness(name) if name else len(PALETTE) - 1
+                    idx = min(len(ramp) - 1, max(1, round(step / (len(PALETTE) - 1) * (len(ramp) - 1))))
                     line.append(ramp[idx])
             out.append("".join(line))
         return "\n".join(out)

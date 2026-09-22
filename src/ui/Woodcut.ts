@@ -4,12 +4,12 @@
  * Responsabilidade: gerar a geometria entalhada usada em telas e molduras — contorno
  * com barrigas e cantos que passam do ponto, marcas de goiva em folha dentro de massas
  * pretas e hachura a 45° para sombra sobre o papel. Sem gradiente, sem glow, sem
- * transparência: tudo é polígono cheio num único tom zinc.
+ * transparência: tudo é polígono cheio num único tom da paleta.
  *
  * Toda irregularidade vem de um gerador com semente fixa, então a mesma peça sai
  * idêntica a cada carga e a cada redimensionamento.
  *
- * Referência: xilo-guidelines §4.4, §4.5, §7, §8, §9, §9.1;
+ * Referência: guidelines.md §3, §13, §15–§17;
  * `.agents/rules/art-linework-and-texture.md`.
  */
 import Phaser from 'phaser';

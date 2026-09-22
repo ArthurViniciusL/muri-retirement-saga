@@ -27,10 +27,10 @@ from pixelpng import Canvas  # noqa: E402
 
 SIZE = 32  # HUD icon, per `art-grid-and-scale.md`
 
-OUTLINE = "zinc-950"  # carve, hatching, cleft
-BODY = "zinc-800"     # the filled heart
-HOLLOW = "zinc-700"   # the rim of a lost heart
-GLINT = "zinc-300"    # single light accent, upper left, so a full heart is found first
+OUTLINE = "ink"  # carve, hatching, cleft
+BODY = "umber"     # the filled heart
+HOLLOW = "sertao"   # the rim of a lost heart
+GLINT = "dust"    # single light accent, upper left, so a full heart is found first
 
 LOBES = ((10.5, 13.0), (20.5, 13.0))
 LOBE_R = 6.4

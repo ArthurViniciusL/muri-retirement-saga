@@ -76,10 +76,10 @@ export class PhaseSelectScene extends Phaser.Scene {
     const centerX = Math.round(width / 2);
 
     const title = this.add
-      .bitmapText(centerX, 0, PixelFont.keyFor(900), phaseSelectText.title, PixelFont.sizeFor(TITLE_SCALE))
+      .bitmapText(centerX, 0, PixelFont.keyFor('ink'), phaseSelectText.title, PixelFont.sizeFor(TITLE_SCALE))
       .setOrigin(0.5, 0);
     const description = this.add
-      .bitmapText(centerX, 0, PixelFont.keyFor(900), phaseSelectText.description, PixelFont.sizeFor(DESCRIPTION_SCALE))
+      .bitmapText(centerX, 0, PixelFont.keyFor('ink'), phaseSelectText.description, PixelFont.sizeFor(DESCRIPTION_SCALE))
       .setOrigin(0.5, 0);
 
     const stackHeight =

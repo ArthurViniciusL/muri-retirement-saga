@@ -1,32 +1,34 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+context: |
+  "A Aposentadoria de Muri": a static, client-only Phaser 3 + TypeScript platformer played
+  once on guests' phones (landscape) at a 50th birthday party. The date is fixed; scope bends.
+  Read AGENTS.md for the team, invariants and gates. Locked decisions live in .agents/rules/
+  and win over .agents/docs/. Never invent a mechanic, value, layout or line: ask the owner.
+  Artifacts are written in English; in-game strings are Brazilian Portuguese.
+  OpenSpec is only for large work: a new system or scene, or a feature that needs decisions
+  from two or more designers. Anything smaller is implemented directly, without a change.
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+rules:
+  proposal:
+    - Keep it under 300 words.
+    - State why, what changes, and non-goals. Name the rule files the change touches.
+    - List open questions for the owner instead of assuming answers.
+  design:
+    - Write it only when there is a real technical decision to make; otherwise say "No design needed" in one line.
+    - Keep it under 400 words. Cover decisions and their alternatives, not a restatement of the proposal or the rules.
+    - Reference rule files by path instead of copying their content.
+  specs:
+    - Only requirements that change behaviour the player can observe. Do not restate AGENTS.md invariants.
+  tasks:
+    - At most 12 tasks, each small enough to finish in one sitting.
+    - Tag each task with its owner agent (game-designer, level-designer, game-artist, ui-ux-designer, dev).
+    - The last task is always "yarn build and yarn lint pass".
 
-# Per-operation guidance (optional)
-# Add advisory guidance for how apply and archive work should be conducted.
-# This is separate from artifact rules above.
-# Example:
-#   operations:
-#     apply:
-#       guidance:
-#         - Keep test summaries concise
-#     archive:
-#       guidance:
-#         - Summarize the archive outcome before finishing
+operations:
+  apply:
+    guidance:
+      - Follow the dev agent's definition of done. Never open a browser or commit without the owner's explicit authorization.
+  archive:
+    guidance:
+      - Archive as soon as every task is checked; fold changed decisions into .agents/rules/.
