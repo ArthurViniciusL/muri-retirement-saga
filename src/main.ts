@@ -16,6 +16,7 @@ import { PhaseSelectScene } from '@/scenes/PhaseSelectScene';
 import { Phase1Scene } from '@/scenes/Phase1Scene';
 import { Phase2Scene } from '@/scenes/Phase2Scene';
 import { Phase3Scene } from '@/scenes/Phase3Scene';
+import { GameOverScene } from '@/scenes/GameOverScene';
 
 const { render, physics } = gameConfig;
 
@@ -39,7 +40,16 @@ const game = new Phaser.Game({
     default: 'arcade',
     arcade: { gravity: { x: 0, y: physics.gravityY } },
   },
-  scene: [BootScene, PreloadScene, MenuScene, PhaseSelectScene, Phase1Scene, Phase2Scene, Phase3Scene],
+  scene: [
+    BootScene,
+    PreloadScene,
+    MenuScene,
+    PhaseSelectScene,
+    Phase1Scene,
+    Phase2Scene,
+    Phase3Scene,
+    GameOverScene,
+  ],
 });
 
 function syncLogicalWidth(): void {
